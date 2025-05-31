@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narzędzia AI - Material 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        .navbar {
+            background-color: #e9eef6;
+            color: #1f1f1f;
+        }
+        .card {
+            background-color: #fef7ff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .category-title {
+            color: #1d192b;
+            border-bottom: 2px solid #cac4d0;
+        }
+        .subcategory-title {
+            color: #49454f;
+        }
+        .link-style, .description-link {
+            color: #6750a4; /* Kolor Material 3 - Primary */
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link-style:hover, .description-link:hover {
+            text-decoration: underline;
+        }
+        .description-text {
+            color: #49454f; /* Kolor Material 3 - On Surface Variant */
+        }
+        .note-text {
+            background-color: #fff3e0; /* Jasny pomarańczowy dla notatek */
+            border-left: 4px solid #ff9800; /* Pomarańczowy akcent */
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .material-icons-outlined {
+            vertical-align: middle;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            background-color: #f0f4f9;
+            color: #1f1f1f;
+            transition: transform 0.3s ease-in-out;
+            z-index: 40; 
+        }
+        .sidebar-link {
+            color: #49454f;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #e0e0ff;
+            color: #1d192b;
+            border-radius: 8px;
+        }
+        .sidebar-category > span {
+            font-weight: 600;
+            color: #1d192b;
+        }
+        .sidebar-subcategory-link {
+            padding-left: 2.5rem; 
+        }
+        .search-input {
+            background-color: #ffffff;
+            border: 1px solid #cac4d0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #1f1f1f;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #6750a4;
+            box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.3);
+        }
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background-color: #cac4d0;
+            border-radius: 3px;
+        }
+        .sidebar-content::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        #mainContainer {
+            transition: margin-left 0.3s ease-in-out; 
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-72 transform -translate-x-full md:translate-x-0 shadow-lg">
+        <div class="p-4">
+            <input type="search" id="sidebarSearch" placeholder="Szukaj w kategoriach..." class="w-full search-input mb-4 text-sm">
+        </div>
+        <nav id="sidebarNav" class="sidebar-content h-[calc(100%-100px)] overflow-y-auto px-4 space-y-2">
+            <div class="sidebar-category">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-indigo-600">smart_toy</span>Chatboty AI
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-online-chatbots" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Chatboty Online</a></li>
+                    <li><a href="#card-ai-search-engines" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Wyszukiwarki AI</a></li>
+                    <li><a href="#card-self-hosting-tools" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Narzędzia Self-Hosting</a></li>
+                    <li><a href="#card-roleplaying-chatbots" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Chatboty do Roleplay</a></li>
+                    <li><a href="#card-coding-ais" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">AI do Kodowania</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-green-600">construction</span>Narzędzia AI
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-general-ai-tools" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Ogólne Narzędzia AI</a></li>
+                    <li><a href="#card-ai-prompts" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Prompty AI</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-cyan-600">view_list</span>Indeksy AI
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-general-ai-indexes" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Ogólne Indeksy AI</a></li>
+                    <li><a href="#card-ai-benchmarks" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Benchmarki AI</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-lime-600">article</span>Generatory Tekstu
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-creative-writing-tools" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Narzędzia do Kreatywnego Pisania</a></li>
+                    <li><a href="#card-text-rephrasing" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Parafrazowanie Tekstu</a></li>
+                    <li><a href="#card-grammar-check" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Sprawdzanie Gramatyki</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-red-600">movie</span>Generowanie Wideo
+                </span>
+                 <ul class="space-y-1 mt-1">
+                    <li><a href="#card-video-generation-tools" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Narzędzia do Generowania Wideo</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-pink-600">image</span>Generowanie Obrazów
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-online-image-generators" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Generatory Obrazów Online</a></li>
+                    <li><a href="#card-image-local-frontends" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Lokalne Interfejsy</a></li>
+                    <li><a href="#card-image-guides-tools" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Poradniki / Narzędzia</a></li>
+                    <li><a href="#card-image-restoration" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Przywracanie Obrazów</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-yellow-600">graphic_eq</span>Generowanie Audio
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-music-generation-tools" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Narzędzia do Generowania Muzyki</a></li>
+                    <li><a href="#card-audio-text-to-speech" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Tekst na Mowę (TTS)</a></li>
+                    <li><a href="#card-audio-voice-change" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Zmiana / Klonowanie Głosu</a></li>
+                    <li><a href="#card-audio-voice-removal" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Usuwanie / Separacja Głosu</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-category mt-4">
+                <span class="flex items-center p-2 text-base">
+                    <span class="material-icons-outlined mr-2 text-gray-600">memory</span>Uczenie Maszynowe
+                </span>
+                <ul class="space-y-1 mt-1">
+                    <li><a href="#card-ml-resources" class="sidebar-link sidebar-subcategory-link block p-2 text-sm">Zasoby Uczenia Maszynowego</a></li>
+                </ul>
+            </div>
+        </nav>
+    </aside>
+
+    <div id="mainContainer" class="flex flex-col min-h-screen md:ml-72"> 
+        <nav class="navbar p-4 shadow-md sticky top-0 z-50 h-16 flex items-center">
+            <div class="container mx-auto flex items-center justify-between">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" aria-label="Przełącz pasek boczny" class="md:hidden p-2 rounded-md text-slate-700 hover:bg-slate-200 mr-2">
+                        <span class="material-icons-outlined">menu</span>
+                    </button>
+                    <span class="material-icons-outlined text-3xl mr-2 text-sky-600">hub</span>
+                    <h1 class="text-2xl font-semibold">Katalog Narzędzi AI</h1>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+            <section id="ai-chatbots" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-indigo-600">smart_toy</span>
+                    Chatboty AI
+                </h2>
+                <div class="note-text">
+                    <p><strong>Uwaga:</strong> Nigdy nie jest dobrym pomysłem przesyłanie osobistych / poufnych plików lub informacji do jakiejkolwiek chmurowej AI, ponieważ wiele z nich trenuje się na Twoich pytaniach i kodzie. Jeśli zależy Ci na prywatności, najlepiej uruchamiać boty lokalnie i pamiętać o używaniu jednorazowych e-maili lub <a href="https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/internet-tools/#wiki_.25B7_email_aliasing" target="_blank" class="description-link">aliasingu</a> podczas rejestracji.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="card-online-chatbots" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-sky-600">public</span>Chatboty Online
+                        </h3>
+                        <div class="mb-4"><a href="https://github.com/cheahjs/free-llm-api-resources" target="_blank" class="link-style">🌐 Free LLM API Resources</a><p class="description-text mt-1 text-sm">Zasoby / Lustra Chatbotów</p></div>
+                        <div class="mb-4"><a href="https://aistudio.google.com/app/prompts/new_chat" target="_blank" class="link-style">⭐ AI Studio</a> lub <a href="https://gemini.google.com/" target="_blank" class="link-style">Gemini</a><p class="description-text mt-1 text-sm">Chatboty Google. Zasoby: <a href="https://www.reddit.com/r/Bard/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/gemini" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://chatgpt.com/" target="_blank" class="link-style">⭐ ChatGPT</a><p class="description-text mt-1 text-sm">Chatbot GPT-4o / o4-mini. Zasoby: <a href="https://www.reddit.com/r/OpenAI/" target="_blank" class="description-link">/r/OpenAI</a>, <a href="https://www.reddit.com/r/ChatGPT/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/openai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://chat.qwen.ai/" target="_blank" class="link-style">⭐ Qwen</a><p class="description-text mt-1 text-sm">Chatboty Alibaba / Qwen3-235B-A22B / Qwen3-32B</p></div>
+                        <div class="mb-4"><a href="https://chat.deepseek.com/" target="_blank" class="link-style">⭐ DeepSeek</a><p class="description-text mt-1 text-sm">DeepSeek-V3 / DeepSeek-R1 / Bez limitów. Zasoby: <a href="https://www.reddit.com/r/DeepSeek/" target="_blank" class="description-link">Subreddit</a>, <a href="https://github.com/deepseek-ai" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://grok.com/" target="_blank" class="link-style">⭐ Grok</a><p class="description-text mt-1 text-sm">Chatbot X.com / Grok 2 (30/h) / Grok 3 (12/2h). Zasoby: <a href="https://www.reddit.com/r/grok/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/kqCc86jM55" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://scira.ai/" target="_blank" class="link-style">⭐ Scira</a><p class="description-text mt-1 text-sm">Claude Sonnet 3.7 / Grok 3 / Mistral Small 3.1 / Optimus Alpha / Wyszukiwarka AI / Bez rejestracji. Zasoby: <a href="https://github.com/zaidmukaddam/scira" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://lmarena.ai" target="_blank" class="link-style">⭐ LMArena</a><p class="description-text mt-1 text-sm">Wiele chatbotów / Bez rejestracji. Zasoby: <a href="https://discord.gg/6GXcFg3TH8" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lm-sys/FastChat" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://copilot.microsoft.com" target="_blank" class="link-style">⭐ Microsoft Copilot</a><p class="description-text mt-1 text-sm">GPT-4o / OpenAI o3-Mini-High / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://chat.mistral.ai" target="_blank" class="link-style">⭐ Mistral</a><p class="description-text mt-1 text-sm">Mistral Large 24.11. Zasoby: <a href="https://discord.gg/mistralai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/chat/" target="_blank" class="link-style">⭐ HuggingChat</a><p class="description-text mt-1 text-sm">DeepSeek-R1-Distill-Qwen-32B / Qwen QwQ-32B / Qwen3-235B-A22B / Wiele chatbotów open-source. Zasoby: <a href="https://github.com/huggingface/chat-ui" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://claude.ai/" target="_blank" class="link-style">Claude</a><p class="description-text mt-1 text-sm">Claude 4 Sonnet / Wymagany numer telefonu. Zasoby: <a href="https://github.com/lugia19/Claude-Usage-Extension" target="_blank" class="description-link">Usage Tracker</a>, <a href="https://www.reddit.com/r/ClaudeAI/" target="_blank" class="description-link">Subreddit</a></p></div>
+                        <div class="mb-4"><a href="https://duck.ai/" target="_blank" class="link-style">DuckDuckGo AI</a><p class="description-text mt-1 text-sm">Wiele chatbotów / o3-Mini / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://chat.oaichat.cc/" target="_blank" class="link-style">ChatK</a> lub <a href="https://lobe.wr.do/" target="_blank" class="link-style">lobe.wr.do</a><p class="description-text mt-1 text-sm">GPT-4o / DeepSeek-R1-32b / Wiele chatbotów. Zasoby: <a href="https://discord.gg/AYFPHvv2jT" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lobehub/lobe-chat" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://aiassistantbot.pages.dev/" target="_blank" class="link-style">AI Assistant</a><p class="description-text mt-1 text-sm">Deepseek-R1 / Qwen QwQ-32B / Wiele chatbotów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://sdk.vercel.ai/" target="_blank" class="link-style">AI SDK</a><p class="description-text mt-1 text-sm">Wiele chatbotów. Zasoby: <a href="https://github.com/vercel/ai" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.giz.ai/" target="_blank" class="link-style">GizAI</a><p class="description-text mt-1 text-sm">Wiele chatbotów</p></div>
+                        <div class="mb-4"><a href="https://chat.xenai.tech/" target="_blank" class="link-style">OI</a> lub <a href="https://freepass.ai/" target="_blank" class="link-style">FreePass</a><p class="description-text mt-1 text-sm">Wiele chatbotów</p></div>
+                        <div class="mb-4"><a href="https://scispace.com/" target="_blank" class="link-style">SciSpace</a> (Bez rejestracji), <a href="https://ekb.scinito.ai/ai/chat" target="_blank" class="link-style">Scinito</a> lub <a href="https://elicit.com/" target="_blank" class="link-style">Elicit</a><p class="description-text mt-1 text-sm">Chatboty do prac naukowych. Zasoby: <a href="https://github.com/elicit" target="_blank" class="description-link">GitHub (Elicit)</a></p></div>
+                        <div class="mb-4"><a href="https://learning.google.com/experiments/learn-about" target="_blank" class="link-style">Learn About</a><p class="description-text mt-1 text-sm">Edukacyjna AI wyszukiwarka Google</p></div>
+                        <div class="mb-4"><a href="https://helixmind.online/" target="_blank" class="link-style">HelixMind</a><p class="description-text mt-1 text-sm">Wiele chatbotów. Zasoby: <a href="https://discord.gg/7CmPjK87n3" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://infermatic.ai/" target="_blank" class="link-style">Infermatic</a><p class="description-text mt-1 text-sm">Wiele chatbotów. Zasoby: <a href="https://discord.gg/9GUXmDx9GF" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.electronhub.top/" target="_blank" class="link-style">Electron Hub</a><p class="description-text mt-1 text-sm">Deepseek-R1 / o3-Mini-High / Wiele chatbotów. Zasoby: <a href="https://discord.com/invite/apUUqbxCBQ" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.nexusmind.tech/" target="_blank" class="link-style">NexusAI</a><p class="description-text mt-1 text-sm">GPT-4o / Deepseek-R1 / o3-Mini-High / 300 dziennie. Zasoby: <a href="https://discord.com/invite/sk8eddGwmP" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://build.nvidia.com/" target="_blank" class="link-style">NVIDIA NIM</a><p class="description-text mt-1 text-sm">Deepseek-R1 / Wiele chatbotów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://oi.wr.do/" target="_blank" class="link-style">OIChat</a><p class="description-text mt-1 text-sm">Gemini-2.5-Pro-Exp / DeepSeek R1 / Qwen QwQ-32B / DeepSeek-V3-0324 / Wiele chatbotów</p></div>
+                        <div class="mb-4"><a href="https://kimi.ai/" target="_blank" class="link-style">Kimi</a><p class="description-text mt-1 text-sm">Chatbot Kimi 1.5</p></div>
+                        <div class="mb-4"><a href="https://groq.com/" target="_blank" class="link-style">Groq</a><p class="description-text mt-1 text-sm">Qwen QwQ-32B / Deepseek-R1-Distill / Wiele chatbotów. Zasoby: <a href="https://discord.gg/invite/groq" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://sambanova.ai/" target="_blank" class="link-style">SambaNova</a><p class="description-text mt-1 text-sm">Deepseek-R1 / Qwen QwQ-32B / DeepSeek-V3-0324 / Wiele chatbotów / Wprowadź fałszywe dane</p></div>
+                        <div class="mb-4"><a href="https://lambda.chat/chatui/" target="_blank" class="link-style">Lambda Chat</a><p class="description-text mt-1 text-sm">Deepseek-R1 / Wiele chatbotów / Bez limitów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://maisa.ai/" target="_blank" class="link-style">Maisa</a><p class="description-text mt-1 text-sm">Chatbot Vinci KPU</p></div>
+                        <div class="mb-4"><a href="https://www.meta.ai/" target="_blank" class="link-style">Meta AI</a><p class="description-text mt-1 text-sm">Chatbot Llama 4</p></div>
+                        <div class="mb-4"><a href="https://chat.baidu.com/" target="_blank" class="link-style">Baidu Chat</a><p class="description-text mt-1 text-sm">Chatbot Baidu / Wymagany numer telefonu</p></div>
+                        <div class="mb-4"><a href="https://chat.minimax.io/" target="_blank" class="link-style">MiniMax AI</a><p class="description-text mt-1 text-sm">Deepseek-R1 / Chatbot MiniMax-Text-01 z dużym oknem kontekstowym tokenów. Zasoby: <a href="https://github.com/MiniMax-AI/MiniMax-01" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://pi.ai/" target="_blank" class="link-style">Pi</a><p class="description-text mt-1 text-sm">Chatbot Inflection AI</p></div>
+                        <div class="mb-4"><a href="https://www.reka.ai/" target="_blank" class="link-style">Reka</a><p class="description-text mt-1 text-sm">Chatbot Reka. Zasoby: <a href="https://discord.gg/jtjNSD52mf" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://poe.com/" target="_blank" class="link-style">Poe</a><p class="description-text mt-1 text-sm">Wiele chatbotów / 150 dziennie / Wymagany numer telefonu. Zasoby: <a href="https://discord.com/invite/joinpoe" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://privategpt.dev/" target="_blank" class="link-style">PrivateGPT</a>, <a href="https://notebooklm.google/" target="_blank" class="link-style">NotebookLM</a>, <a href="https://www.onyx.app/" target="_blank" class="link-style">Onyx</a> lub <a href="https://www.docsgpt.cloud/" target="_blank" class="link-style">DocsGPT</a><p class="description-text mt-1 text-sm">Chatboty do dokumentów / Notatki. Zasoby: <a href="https://discord.com/invite/bK6mRVpErU" target="_blank" class="description-link">Discord (PrivateGPT)</a>, <a href="https://github.com/zylon-ai/private-gpt" target="_blank" class="description-link">GitHub (PrivateGPT)</a>, <a href="https://discord.com/invite/jDnRGhWhg4" target="_blank" class="description-link">Discord (Onyx)</a>, <a href="https://github.com/onyx-dot-app/onyx" target="_blank" class="description-link">GitHub (Onyx)</a>, <a href="https://discord.com/invite/n5BX8dh8rU" target="_blank" class="description-link">Discord (DocsGPT)</a>, <a href="https://github.com/arc53/DocsGPT" target="_blank" class="description-link">GitHub (DocsGPT)</a></p></div>
+                    </div>
+
+                    <div id="card-ai-search-engines" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-teal-600">search</span>Wyszukiwarki AI
+                        </h3>
+                        <div class="mb-4"><a href="https://github.com/felladrin/awesome-ai-web-search" target="_blank" class="link-style">🌐 Awesome AI Web Search</a><p class="description-text mt-1 text-sm">Indeks wyszukiwarek AI</p></div>
+                        <div class="mb-4"><a href="https://www.perplexity.ai/" target="_blank" class="link-style">⭐ Perplexity</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI. Zasoby: <a href="https://www.cplx.app/" target="_blank" class="description-link">Ulepszenia</a>, <a href="https://labs.perplexity.ai/" target="_blank" class="description-link">Modele Open Source</a>, <a href="https://discord.com/invite/perplexity-ai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.wolframalpha.com/" target="_blank" class="link-style">⭐ WolframAlpha</a><p class="description-text mt-1 text-sm">Przeszukiwalna baza wiedzy / Bez rejestracji. Zasoby: <a href="https://rentry.co/FMHYBase64#wolfram-mobile" target="_blank" class="description-link">Mobile</a></p></div>
+                        <div class="mb-4"><a href="https://you.com/" target="_blank" class="link-style">⭐ You</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Wymagana rejestracja. Zasoby: <a href="https://discord.com/invite/youdotcom" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/You-OpenSource" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://google.com/aimode" target="_blank" class="link-style">Google AI Mode</a>, <a href="https://www.google.com/search?udm=50" target="_blank" class="link-style">2</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji / Tylko USA</p></div>
+                        <div class="mb-4"><a href="https://hyper.space/" target="_blank" class="link-style">Hyperspace</a><p class="description-text mt-1 text-sm">Sieć P2P AI / Bez rejestracji. Zasoby: <a href="https://play.hyper.space/" target="_blank" class="description-link">Aplikacja Web</a>, <a href="https://compute.hyper.space/" target="_blank" class="description-link">2</a>, <a href="https://github.com/hyperspaceai" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.phind.com/" target="_blank" class="link-style">Phind</a><p class="description-text mt-1 text-sm">Wyszukiwarka Llama / Bez rejestracji. Zasoby: <a href="https://discord.gg/S25yW8TebZ" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.morphic.sh/" target="_blank" class="link-style">Morphic</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI GPT-4o-mini / Bez rejestracji. Zasoby: <a href="https://discord.gg/zRxaseCuGq" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://komo.ai/" target="_blank" class="link-style">Komo</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://search.jina.ai/" target="_blank" class="link-style">Jina</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://felo.ai/" target="_blank" class="link-style">Felo</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Agenci AI / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://searc.ai/" target="_blank" class="link-style">searc.ai</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://rabbitholes.dojoma.ai/" target="_blank" class="link-style">RabbitHoles</a><p class="description-text mt-1 text-sm">Wyszukiwanie w stylu mapy myśli. Zasoby: <a href="https://discord.com/invite/VQMBGR8u5v" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/AsyncFuncAI/rabbitholes" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://hika.fyi/" target="_blank" class="link-style">Hika</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI Deepseek-R1 / Bez rejestracji. Zasoby: <a href="https://discord.gg/tUATkScUue" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://khoj.dev/" target="_blank" class="link-style">Khoj</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI Gemini-2.0-Flash / Agenci AI / Wymagana rejestracja. Zasoby: <a href="https://discord.gg/BDgyabRM6e" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/khoj-ai/khoj" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://ayesoul.com/" target="_blank" class="link-style">AyeSoul</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://venice.ai/" target="_blank" class="link-style">Venice</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI LLama 3 / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://uncovr.app/" target="_blank" class="link-style">uncovr</a><p class="description-text mt-1 text-sm">GPT-4o-mini / Wyszukiwarka AI Gemini-2.0-Flash / Bez rejestracji. Zasoby: <a href="https://discord.gg/a4gDaVWceP" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://exa.ai/" target="_blank" class="link-style">Exa</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji. Zasoby: <a href="https://discord.gg/HCShtBqbfV" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://search.lepton.run/" target="_blank" class="link-style">Lepton Search</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Bez rejestracji. Zasoby: <a href="https://github.com/leptonai/search_with_lepton" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/ItzCrazyKns/Perplexica" target="_blank" class="link-style">Perplexica</a><p class="description-text mt-1 text-sm">Wyszukiwarka AI / Self-Hosted. Zasoby: <a href="https://discord.gg/26aArMy8tT" target="_blank" class="description-link">Discord</a></p></div>
+                    </div>
+
+                    <div id="card-self-hosting-tools" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-orange-600">dns</span>Narzędzia Self-Hosting
+                        </h3>
+                        <div class="mb-4"><a href="https://jan.ai/" target="_blank" class="link-style">⭐ Jan</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.com/invite/FTk2MvZwJH" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/janhq/jan" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://docs.sillytavern.app/" target="_blank" class="link-style">⭐ SillyTavern</a><p class="description-text mt-1 text-sm">Interfejs Self-Hosted. Zasoby: <a href="https://discord.gg/sillytavern" target="_blank" class="description-link">Discord</a>, <a href="https://www.reddit.com/r/SillyTavernAI/" target="_blank" class="description-link">Subreddit</a>, <a href="https://github.com/SillyTavern/SillyTavern" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://openwebui.com/" target="_blank" class="link-style">⭐ Open WebUI</a><p class="description-text mt-1 text-sm">Interfejs Self-Hosted. Zasoby: <a href="https://discord.gg/5rJgQTnV4s" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/open-webui/open-webui" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/ggerganov/llama.cpp" target="_blank" class="link-style">⭐ llama.cpp</a><p class="description-text mt-1 text-sm">Self-Hosted LLM-y oparte na Transformerach. Zasoby: <a href="https://rentry.org/llama-mini-guide" target="_blank" class="description-link">Przewodnik</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/LostRuins/koboldcpp" target="_blank" class="link-style">⭐ KoboldCpp</a><p class="description-text mt-1 text-sm">llama.cpp z API + GUI. Zasoby: <a href="https://github.com/YellowRoseCx/koboldcpp-rocm" target="_blank" class="description-link">ROCm</a>, <a href="https://colab.research.google.com/github/LostRuins/koboldcpp/blob/concedo/colab.ipynb" target="_blank" class="description-link">Colab</a></p></div>
+                        <div class="mb-4"><a href="https://pinokio.computer/" target="_blank" class="link-style">⭐ Pinokio</a><p class="description-text mt-1 text-sm">Instalator modeli AI jednym kliknięciem. Zasoby: <a href="https://discord.gg/TQdNwadtE4" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/pinokiocomputer/pinokio" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/oobabooga/text-generation-webui" target="_blank" class="link-style">⭐ oobabooga</a><p class="description-text mt-1 text-sm">Hostuj modele samodzielnie. Zasoby: <a href="https://colab.research.google.com/github/pcrii/Philo-Colab-Collection/blob/main/4bit_TextGen_Gdrive.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://www.reddit.com/r/Oobabooga/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.gg/jwZCF2dPQN" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://aphrodite.pygmalion.chat/" target="_blank" class="link-style">⭐ Aphrodite Engine</a><p class="description-text mt-1 text-sm">Serwuj LLM-y na dużą skalę z API Kobold & OpenAI. Zasoby: <a href="https://colab.research.google.com/github/AlpinDale/misc-scripts/blob/main/Aphrodite.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://github.com/PygmalionAI/aphrodite-engine" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://petals.dev/" target="_blank" class="link-style">Petals</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.gg/D9MwApKgWa" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/bigscience-workshop/petals" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://getleon.ai/" target="_blank" class="link-style">Leon</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.gg/MNQqqKg" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/leon-ai/leon" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://ollama.com/" target="_blank" class="link-style">Ollama</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.com/invite/ollama" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/ollama/ollama" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/aandrew-me/tgpt" target="_blank" class="link-style">tgpt</a><p class="description-text mt-1 text-sm">Self-Hosted</p></div>
+                        <div class="mb-4"><a href="https://github.com/ParisNeo/lollms-webui" target="_blank" class="link-style">LoLLMs Web UI</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.gg/4rR282WJb6" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://lmstudio.ai/" target="_blank" class="link-style">LM Studio</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.gg/aPQfnNkxGC" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lmstudio-ai" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://anythingllm.com/" target="_blank" class="link-style">AnythingLLM</a><p class="description-text mt-1 text-sm">Self-Hosted</p></div>
+                        <div class="mb-4"><a href="https://librechat.ai/" target="_blank" class="link-style">LibreChat</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://discord.com/invite/CEe6vDg9Ky" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/danny-avila/LibreChat" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.nomic.ai/gpt4all" target="_blank" class="link-style">GPT4All</a><p class="description-text mt-1 text-sm">Self-Hosted. Zasoby: <a href="https://github.com/nomic-ai/gpt4all" target="_blank" class="description-link">GitHub</a>, <a href="https://discord.com/invite/myY5YDR8z8" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/Mozilla-Ocho/llamafile" target="_blank" class="link-style">llamafile</a><p class="description-text mt-1 text-sm">Uruchamiaj LLM z pojedynczych plików. Zasoby: <a href="https://discord.gg/YuMNeuKStr" target="_blank" class="description-link">Discord</a></p></div>
+                    </div>
+
+                    <div id="card-roleplaying-chatbots" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-purple-600">theater_comedy</span>Chatboty do Roleplay
+                        </h3>
+                        <div class="mb-4"><a href="https://rentry.org/Sukino-Findings" target="_blank" class="link-style">🌐 Sukino-Findings</a><p class="description-text mt-1 text-sm">Zasoby do AI Roleplay</p></div>
+                        <div class="mb-4"><a href="https://besterp.ai/" target="_blank" class="link-style">🌐 BestERP</a><p class="description-text mt-1 text-sm">Listy LLM do Roleplay</p></div>
+                        <div class="mb-4"><a href="https://pygmalion.chat/" target="_blank" class="link-style">⭐ PygmalionAI</a><p class="description-text mt-1 text-sm">Modele Roleplaying Self-Hosted. Zasoby: <a href="https://rentry.co/PygmalionLinks" target="_blank" class="description-link">Zasoby</a>, <a href="https://discord.com/invite/pygmalionai" target="_blank" class="description-link">Discord</a>, <a href="https://www.reddit.com/r/PygmalionAI/" target="_blank" class="description-link">Subreddit</a>, <a href="https://github.com/PygmalionAI" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://character.ai/" target="_blank" class="link-style">⭐ Character.AI</a><p class="description-text mt-1 text-sm">Chatboty Roleplaying. Zasoby: <a href="https://rentry.org/reverseCAI" target="_blank" class="description-link">Extract</a>, <a href="https://discord.com/invite/characterai" target="_blank" class="description-link">Discord</a>, <a href="https://www.reddit.com/r/CharacterAI/" target="_blank" class="description-link">Subreddit</a></p></div>
+                        <div class="mb-4"><a href="https://flowgpt.com" target="_blank" class="link-style">⭐ FlowGPT</a><p class="description-text mt-1 text-sm">Chatboty Roleplaying / Niektóre NSFW. Zasoby: <a href="https://discord.com/invite/tWZGzcpTkf" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://wikia.schneedc.com/bot-creation/intro" target="_blank" class="link-style">⭐ Bot Creation Guide</a><p class="description-text mt-1 text-sm">Przewodnik tworzenia postaci</p></div>
+                        <div class="mb-4"><a href="https://chub.ai/" target="_blank" class="link-style">⭐ Chub</a><p class="description-text mt-1 text-sm">Karty postaci / Niektóre NSFW. Zasoby: <a href="https://discord.gg/chubai" target="_blank" class="description-link">Discord</a>, <a href="https://www.reddit.com/r/Chub_AI/" target="_blank" class="description-link">Subreddit</a>, <a href="https://github.com/CharHubAI" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://rentry.org/llama_v2_sillytavern" target="_blank" class="link-style">Llama + SillyTavern</a><p class="description-text mt-1 text-sm">Przewodnik konfiguracji Llama + SillyTavern do Roleplay / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://koboldai.com/" target="_blank" class="link-style">KoboldAI</a><p class="description-text mt-1 text-sm">GUI do chatbotów Roleplaying / Bez rejestracji. Zasoby: <a href="https://discord.com/invite/XuQWadgU9k" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/henk717/KoboldAI" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://beta.4wall.ai/" target="_blank" class="link-style">4thWall AI</a><p class="description-text mt-1 text-sm">Chatboty Roleplaying. Zasoby: <a href="https://discord.com/invite/4wallai" target="_blank" class="description-link">Discord</a>, <a href="https://www.reddit.com/r/4WallAI/" target="_blank" class="description-link">Subreddit</a></p></div>
+                        <div class="mb-4"><a href="https://app.wyvern.chat/" target="_blank" class="link-style">WyvernChat</a><p class="description-text mt-1 text-sm">Chatboty Roleplaying</p></div>
+                        <div class="mb-4"><a href="https://janitorai.com/" target="_blank" class="link-style">JanitorAI</a><p class="description-text mt-1 text-sm">Chatboty Roleplaying / Niektóre NSFW</p></div>
+                        <div class="mb-4"><a href="https://fictionlab.ai/" target="_blank" class="link-style">FictionLab</a><p class="description-text mt-1 text-sm">Chatbot Roleplaying / Fabularny. Zasoby: <a href="https://discord.com/invite/SKcb2C7HjH" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://tavernai.net/" target="_blank" class="link-style">TavernAI</a><p class="description-text mt-1 text-sm">Chatbot Roleplaying / Fabularny. Zasoby: <a href="https://colab.research.google.com/github/vrihatgan/TavernAI/blob/main/colab/colab.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://discord.gg/zmK2gmr45t" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/TavernAI/TavernAI" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://aidungeon.com/" target="_blank" class="link-style">AI Dungeon</a><p class="description-text mt-1 text-sm">Chatbot Roleplaying / Fabularny / Bez rejestracji. Zasoby: <a href="https://www.reddit.com/r/AIDungeon/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/HB2YBZYjyf" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.tryspellbound.com/" target="_blank" class="link-style">Spellbound</a><p class="description-text mt-1 text-sm">Chatbot Roleplaying / Fabularny / Bez rejestracji. Zasoby: <a href="https://discord.com/invite/spellbound" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://kajiwoto.ai/" target="_blank" class="link-style">Kajiwoto</a>, <a href="https://docs.miku.gg/" target="_blank" class="link-style">Miku</a> (Bez rejestracji) lub <a href="https://agnai.chat/" target="_blank" class="link-style">Agnai</a><p class="description-text mt-1 text-sm">Kreatory chatbotów. Zasoby: <a href="https://discord.gg/3XPdpUdGgV" target="_blank" class="description-link">Discord (Miku)</a>, <a href="https://discord.com/invite/DAn38sA8Qj" target="_blank" class="description-link">Discord (Agnai)</a></p></div>
+                        <div class="mb-4"><a href="https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice#demo" target="_blank" class="link-style">Crossing the Uncanny Valley</a><p class="description-text mt-1 text-sm">Realistyczny czat głosowy AI</p></div>
+                        <div class="mb-4"><a href="https://www.hammerai.com/desktop" target="_blank" class="link-style">HammerAI</a><p class="description-text mt-1 text-sm">Chatboty Roleplaying Self-Hosted</p></div>
+                    </div>
+                     <div id="card-coding-ais" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-blue-600">code</span>AI do Kodowania
+                        </h3>
+                        <div class="mb-4"><a href="https://evalplus.github.io/leaderboard.html" target="_blank" class="link-style">🌐 EvalPlus Leaderboard</a>, <a href="https://web.lmarena.ai/" target="_blank" class="link-style">WebDev Arena</a>, <a href="https://liveswebench.ai/" target="_blank" class="link-style">LiveSWEBench</a>, <a href="https://aider.chat/docs/leaderboards/" target="_blank" class="link-style">Aider LLM Leaderboards</a> lub <a href="https://huggingface.co/spaces/bigcode/bigcode-models-leaderboard" target="_blank" class="link-style">Big Code Models Leaderboard</a><p class="description-text mt-1 text-sm">Rankingi AI do kodowania. Zasoby: <a href="https://github.com/evalplus/evalplus" target="_blank" class="description-link">GitHub (EvalPlus)</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/e2b-dev/awesome-ai-agents" target="_blank" class="link-style">🌐 Awesome AI Agents</a><p class="description-text mt-1 text-sm">AI do kodowania / programowania. Zasoby: <a href="https://discord.gg/U7KEcGErtQ" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/cheahjs/free-llm-api-resources" target="_blank" class="link-style">🌐 Free LLM API Resources</a><p class="description-text mt-1 text-sm">Zasoby API LLM</p></div>
+                        <div class="mb-4"><a href="https://www.windsurf.com/" target="_blank" class="link-style">⭐ Windsurf</a><p class="description-text mt-1 text-sm">AI do kodowania. Zasoby: <a href="https://www.reddit.com/r/Codeium/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/3XFf78nAx5" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://pieces.app/" target="_blank" class="link-style">⭐ Pieces</a><p class="description-text mt-1 text-sm">AI do kodowania z wieloma LLM / GPT-4 / 4o za darmo / Bez rejestracji. Zasoby: <a href="https://discord.gg/getpieces" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://zed.dev/" target="_blank" class="link-style">⭐ zed</a><p class="description-text mt-1 text-sm">Współpracująca AI do kodowania. Zasoby: <a href="https://github.com/zed-industries/zed" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://whatdoesthiscodedo.com/" target="_blank" class="link-style">WDTCD?</a><p class="description-text mt-1 text-sm">Proste wyjaśnienia kodu / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://sourcery.ai/" target="_blank" class="link-style">Sourcery</a><p class="description-text mt-1 text-sm">Automatyczne przeglądy Pull Requestów. Zasoby: <a href="https://github.com/sourcery-ai/sourcery" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://devv.ai/" target="_blank" class="link-style">Devv</a><p class="description-text mt-1 text-sm">Wyszukiwarka do kodowania. Zasoby: <a href="https://github.com/devv-ai/devv" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.telosys.org/" target="_blank" class="link-style">Telosys</a><p class="description-text mt-1 text-sm">Generator kodu / Bez rejestracji. Zasoby: <a href="https://www.telosys.org/sources.html" target="_blank" class="description-link">Kod źródłowy</a></p></div>
+                        <div class="mb-4"><a href="https://llamacoder.together.ai/" target="_blank" class="link-style">Llama Coder</a><p class="description-text mt-1 text-sm">Generator kodu / Bez rejestracji. Zasoby: <a href="https://github.com/Nutlope/llamacoder" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://imgcook.com" target="_blank" class="link-style">imgcook</a><p class="description-text mt-1 text-sm">AI do kodowania / Bez rejestracji. Zasoby: <a href="https://github.com/imgcook/imgcook" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://supermaven.com/" target="_blank" class="link-style">Supermaven</a><p class="description-text mt-1 text-sm">AI do kodowania / Bez rejestracji. Zasoby: <a href="https://discord.com/invite/QQpqBmQH3w" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://sourcegraph.com/cody" target="_blank" class="link-style">Cody</a><p class="description-text mt-1 text-sm">AI do kodowania. Zasoby: <a href="https://discord.gg/s2qDtYGnAE" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/sourcegraph/cody" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.all-hands.dev/" target="_blank" class="link-style">OpenHands</a><p class="description-text mt-1 text-sm">AI do kodowania. Zasoby: <a href="https://discord.gg/ESHStjSjD4" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/All-Hands-AI/OpenHands" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://continue.dev/" target="_blank" class="link-style">Continue</a><p class="description-text mt-1 text-sm">AI do kodowania. Zasoby: <a href="https://discord.com/invite/EfJEfdFnDQ" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/continuedev/continue" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/features/copilot" target="_blank" class="link-style">GitHub Copilot</a><p class="description-text mt-1 text-sm">AI do kodowania</p></div>
+                        <div class="mb-4"><a href="https://www.trae.ai/" target="_blank" class="link-style">Trae</a><p class="description-text mt-1 text-sm">AI do kodowania</p></div>
+                        <div class="mb-4"><a href="https://github.com/cline/cline" target="_blank" class="link-style">Cline</a><p class="description-text mt-1 text-sm">AI do kodowania. Zasoby: <a href="https://discord.gg/cline" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://rentry.co/FMHYBase64#cursor" target="_blank" class="link-style">Cursor</a><p class="description-text mt-1 text-sm">AI do kodowania</p></div>
+                        <div class="mb-4"><a href="https://gitwit.dev/" target="_blank" class="link-style">GitWit</a><p class="description-text mt-1 text-sm">AI do kodowania</p></div>
+                        <div class="mb-4"><a href="https://www.qodo.ai/" target="_blank" class="link-style">Qodo</a><p class="description-text mt-1 text-sm">AI do kodowania</p></div>
+                        <div class="mb-4"><a href="https://www.blackbox.ai/" target="_blank" class="link-style">Blackbox</a><p class="description-text mt-1 text-sm">AI do kodowania / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://denigma.app/" target="_blank" class="link-style">Denigma</a><p class="description-text mt-1 text-sm">AI do kodowania / Bez rejestracji. Zasoby: <a href="https://discord.gg/mZx4REBvKm" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://aider.chat/" target="_blank" class="link-style">Aider</a><p class="description-text mt-1 text-sm">AI do kodowania w terminalu. Zasoby: <a href="https://discord.com/invite/Y7X7bhMQFV" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/Aider-AI/aider" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.codacy.com/" target="_blank" class="link-style">Codacy</a><p class="description-text mt-1 text-sm">AI do naprawiania kodu. Zasoby: <a href="https://github.com/codacy" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/OpenInterpreter/open-interpreter" target="_blank" class="link-style">Open Interpreter</a><p class="description-text mt-1 text-sm">Uruchamiaj kod lokalnie / Bez rejestracji. Zasoby: <a href="https://discord.gg/Hvz9Axh84z" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://v0.dev/" target="_blank" class="link-style">v0</a><p class="description-text mt-1 text-sm">Tekst na kod strony</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/enzostvs/deepsite" target="_blank" class="link-style">DeepSite</a><p class="description-text mt-1 text-sm">Tekst na kod strony</p></div>
+                        <div class="mb-4"><a href="https://bolt.new/" target="_blank" class="link-style">Bolt.new</a><p class="description-text mt-1 text-sm">Kreator aplikacji webowych. Zasoby: <a href="https://discord.com/invite/stackblitz" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/stackblitz/bolt.new" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://fragments.e2b.dev/" target="_blank" class="link-style">Fragments</a><p class="description-text mt-1 text-sm">Kreator aplikacji. Zasoby: <a href="https://discord.com/invite/U7KEcGErtQ" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/e2b-dev" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://composio.dev/" target="_blank" class="link-style">Composio</a><p class="description-text mt-1 text-sm">Dodawaj narzędzia do AI do kodowania. Zasoby: <a href="https://discord.com/invite/cNruWaAhQk" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/ComposioHQ/composio" target="_blank" class="description-link">GitHub</a></p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai-tools" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-green-600">construction</span>Narzędzia AI
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="card-general-ai-tools" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-green-700">build_circle</span>Ogólne Narzędzia AI
+                        </h3>
+                        <div class="mb-4"><a href="https://github.com/sindresorhus/awesome-chatgpt" target="_blank" class="link-style">🌐 sindresorhus's Awesome ChatGPT</a> lub <a href="https://github.com/uhub/awesome-chatgpt" target="_blank" class="link-style">Awesome ChatGPT</a><p class="description-text mt-1 text-sm">Zasoby AI</p></div>
+                        <div class="mb-4"><a href="https://github.com/billmei/every-chatgpt-gui" target="_blank" class="link-style">🌐 Every ChatGPT GUI</a><p class="description-text mt-1 text-sm">Indeks GUI ChatGPT</p></div>
+                        <div class="mb-4"><a href="https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/dev-tools/#wiki_.25B7_api_tools" target="_blank" class="link-style">↪️ AI API Tools</a><p class="description-text mt-1 text-sm">Narzędzia API AI (Reddit)</p></div>
+                        <div class="mb-4"><a href="https://computer.tldraw.com/" target="_blank" class="link-style">tldraw computer</a><p class="description-text mt-1 text-sm">Twórz przepływy pracy komponentów do generowania lub przekształcania danych. Zasoby: <a href="https://discord.com/invite/SBBEVCA4PG" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/tldraw/tldraw" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/josStorer/chatGPTBox" target="_blank" class="link-style">ChatGPT Box</a> lub <a href="https://github.com/xcanwin/KeepChatGPT/blob/main/docs/README_EN.md" target="_blank" class="link-style">KeepChatGPT</a><p class="description-text mt-1 text-sm">Rozszerzenia</p></div>
+                        <div class="mb-4"><a href="https://llm.datasette.io/" target="_blank" class="link-style">LLM</a><p class="description-text mt-1 text-sm">LLM CLI. Zasoby: <a href="https://discord.com/invite/RKAH4b8TvE" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/simonw/llm" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/xtekky/gpt4free" target="_blank" class="link-style">GPT4Free</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa. Zasoby: <a href="https://telegram.me/g4f_channel" target="_blank" class="description-link">Telegram</a></p></div>
+                        <div class="mb-4"><a href="https://msty.app/" target="_blank" class="link-style">Msty</a><p class="description-text mt-1 text-sm">Pobieraj i uruchamiaj modele lokalnie. Zasoby: <a href="https://discord.gg/2QBw6XxkCC" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://lobechat.com/chat" target="_blank" class="link-style">LobeChat</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa. Zasoby: <a href="https://discord.gg/AYFPHvv2jT" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lobehub/lobe-chat" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://noi.nofwl.com/" target="_blank" class="link-style">Noi</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa. Zasoby: <a href="https://discord.gg/kq2HXcpJSQ" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lencx/Noi" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://chatbotui.com" target="_blank" class="link-style">Chatbot UI</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa. Zasoby: <a href="https://github.com/mckaywrigley/chatbot-ui" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.nvidia.com/en-us/ai-on-rtx/chatrtx/" target="_blank" class="link-style">ChatRTX</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa / Tylko GPU RTX 30+</p></div>
+                        <div class="mb-4"><a href="https://www.chatpdf.com/" target="_blank" class="link-style">ChatPDF</a> (Bez rejestracji) lub <a href="https://askyourpdf.com/" target="_blank" class="link-style">AskYourPDF</a><p class="description-text mt-1 text-sm">Zamień książki / PDF-y w chatboty</p></div>
+                        <div class="mb-4"><a href="https://github.com/4as/ChatGPT-DeMod" target="_blank" class="link-style">ChatGPT DeMod</a><p class="description-text mt-1 text-sm">Blokuje kontrole moderacji ChatGPT</p></div>
+                        <div class="mb-4"><a href="https://askconcierge.ai/" target="_blank" class="link-style">Concierge</a><p class="description-text mt-1 text-sm">Połącz aplikacje z AI</p></div>
+                        <div class="mb-4"><a href="https://www.bibcit.com/en/massivemark" target="_blank" class="link-style">MassiveMark</a><p class="description-text mt-1 text-sm">Konwertuj czaty LLM do DOCX. Zasoby: <a href="https://discord.gg/fPtQAQYmqq" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://chatgptevo.com/widescreen/" target="_blank" class="link-style">ChatGPT Widescreen</a><p class="description-text mt-1 text-sm">ChatGPT Widescreen / Pełny ekran. Zasoby: <a href="https://github.com/adamlui/chatgpt-widescreen" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://voicecontrol.chat/" target="_blank" class="link-style">Voice Control</a><p class="description-text mt-1 text-sm">Sterowanie głosowe ChatGPT</p></div>
+                        <div class="mb-4"><a href="https://screenpi.pe/" target="_blank" class="link-style">screenpipe</a><p class="description-text mt-1 text-sm">Rejestrator ekranu AI / Bez rejestracji. Zasoby: <a href="https://discord.gg/dU9EBuw7Uq" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/mediar-ai/screenpipe" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://greasyfork.org/en/scripts/456055" target="_blank" class="link-style">ChatGPT Exporter</a><p class="description-text mt-1 text-sm">Eksportuj czaty. Zasoby: <a href="https://github.com/pionxzh/chatgpt-exporter" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/itsmartashub/GPThemes" target="_blank" class="link-style">GPThemes</a><p class="description-text mt-1 text-sm">Motywy ChatGPT</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator" target="_blank" class="link-style">LLM Model VRAM Calculator</a><p class="description-text mt-1 text-sm">Kalkulatory wymagań LLM</p></div>
+                        <div class="mb-4"><a href="https://rentry.org/aipiracyresources" target="_blank" class="link-style">AI Piracy Resources</a><p class="description-text mt-1 text-sm">Przewodnik / Zasoby dotyczące piractwa AI</p></div>
+                    </div>
+                    <div id="card-ai-prompts" class="card p-6">
+                         <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-amber-600">lightbulb</span>Prompty AI
+                        </h3>
+                        <div class="note-text text-sm">
+                            <p><strong>Uwaga:</strong> Omijanie zabezpieczeń chatbotów (tzw. jailbreaking) jest sprzeczne z TOS większości AI, więc używaj ich na własne ryzyko.</p>
+                        </div>
+                        <div class="mb-4"><a href="https://rentry.org/jb-listing" target="_blank" class="link-style">🌐 Jailbreak Listings</a><p class="description-text mt-1 text-sm">Listy Promptów / Jailbreaków</p></div>
+                        <div class="mb-4"><a href="https://github.com/friuns2/BlackFriday-GPTs-Prompts" target="_blank" class="link-style">⭐ BlackFriday GPTs Prompts</a><p class="description-text mt-1 text-sm">Katalog Promptów</p></div>
+                        <div class="mb-4"><a href="https://github.com/linexjlin/GPTs" target="_blank" class="link-style">⭐ Leaked Prompts</a><p class="description-text mt-1 text-sm">Katalog Promptów</p></div>
+                        <div class="mb-4"><a href="https://www.promptingguide.ai" target="_blank" class="link-style">⭐ Prompt Engineering Guide</a>, <a href="https://www.kaggle.com/whitepaper-prompt-engineering" target="_blank" class="link-style">Google Whitepaper</a>, <a href="https://github.com/NirDiamant/Prompt_Engineering" target="_blank" class="link-style">Prompt_Engineering</a>, <a href="https://learnprompting.org/docs/introduction" target="_blank" class="link-style">LearnPrompting</a>, <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" class="link-style">OpenAI Guide</a> lub <a href="https://docs.anthropic.com/claude/docs/prompt-engineering" target="_blank" class="link-style">Claude Guide</a><p class="description-text mt-1 text-sm">Przewodniki po Promptingu. Zasoby: <a href="https://discord.gg/FUyz9vPAwf" target="_blank" class="description-link">Discord (PromptingGuide)</a>, <a href="https://github.com/dair-ai/Prompt-Engineering-Guide" target="_blank" class="description-link">GitHub (PromptingGuide)</a></p></div>
+                        <div class="mb-4"><a href="https://www.reddit.com/r/ChatGPTJailbreak/" target="_blank" class="link-style">/r/ChatGPTJailbreak</a><p class="description-text mt-1 text-sm">Społeczność AI Jailbreak</p></div>
+                        <div class="mb-4"><a href="https://github.com/LouisShark/chatgpt_system_prompt" target="_blank" class="link-style">ChatGPT System Prompt</a><p class="description-text mt-1 text-sm">Katalog Promptów</p></div>
+                        <div class="mb-4"><a href="https://github.com/0xeb/TheBigPromptLibrary" target="_blank" class="link-style">The Big Prompt Library</a><p class="description-text mt-1 text-sm">Katalog Promptów</p></div>
+                        <div class="mb-4"><a href="https://github.com/yokoffing/ChatGPT-Prompts" target="_blank" class="link-style">ChatGPT & Bing AI Prompts</a><p class="description-text mt-1 text-sm">Katalog Promptów</p></div>
+                        <div class="mb-4"><a href="https://github.com/elder-plinius/L1B3RT4S" target="_blank" class="link-style">L1B3RT4S</a><p class="description-text mt-1 text-sm">Prompty Jailbreak. Zasoby: <a href="https://discord.gg/basi" target="_blank" class="description-link">Discord</a>, <a href="https://x.com/elder_plinius" target="_blank" class="description-link">X</a></p></div>
+                        <div class="mb-4"><a href="https://www.promptfoo.dev/" target="_blank" class="link-style">promptfoo</a><p class="description-text mt-1 text-sm">Place zabaw dla promptów. Zasoby: <a href="https://discord.gg/gHPS9jjfbs" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/promptfoo/promptfoo" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://tensortrust.ai/" target="_blank" class="link-style">Tensor Trust</a> / <a href="https://github.com/HumanCompatibleAI/tensor-trust" target="_blank" class="link-style">GitHub</a> lub <a href="https://gandalf.lakera.ai/" target="_blank" class="link-style">Gandalf</a> / <a href="https://github.com/lakeraai" target="_blank" class="description-link">GitHub</a><p class="description-text mt-1 text-sm">Gry umiejętnościowe w promptingu</p></div>
+                        <div class="mb-4"><a href="https://redarena.ai/" target="_blank" class="link-style">RedTeam Arena</a><p class="description-text mt-1 text-sm">Gra AI Jailbreak</p></div>
+                        <div class="mb-4"><a href="https://gobble.bot/" target="_blank" class="link-style">Gobble Bot</a><p class="description-text mt-1 text-sm">Generuj pliki tekstowe dla chatbotów</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai-indexes" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-cyan-600">view_list</span>Indeksy AI
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     <div id="card-general-ai-indexes" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-cyan-700">list_alt</span>Ogólne Indeksy AI
+                        </h3>
+                        <div class="mb-4"><a href="https://lifearchitect.ai/models-table/" target="_blank" class="link-style">🌐 LifeArchitect</a><p class="description-text mt-1 text-sm">Indeks LLM</p></div>
+                        <div class="mb-4"><a href="https://www.futuretools.io/?pricing-model=free" target="_blank" class="link-style">🌐 FutureTools</a><p class="description-text mt-1 text-sm">Katalog AI. Zasoby: <a href="https://discord.gg/WBk4ZDW6A9" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://labs.google/" target="_blank" class="link-style">🌐 Google Labs</a> lub <a href="https://labs.google/fx" target="_blank" class="link-style">Google Labs FX</a><p class="description-text mt-1 text-sm">Eksperymenty AI Google. Zasoby: <a href="https://www.reddit.com/r/labsdotgoogle/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.gg/googlelabs" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://perchance.org/generators" target="_blank" class="link-style">Perchance</a> / <a href="https://discord.gg/43qAQEVV9a" target="_blank" class="link-style">Discord</a> lub <a href="https://websim.ai/" target="_blank" class="link-style">WebSim</a> / <a href="https://www.reddit.com/r/WebSim/" target="_blank" class="link-style">Subreddit</a> / <a href="https://discord.gg/websim" target="_blank" class="description-link">Discord</a><p class="description-text mt-1 text-sm">Proste kreatory AI</p></div>
+                        <div class="mb-4"><a href="https://www.ypforai.com" target="_blank" class="link-style">YP for AI</a><p class="description-text mt-1 text-sm">Katalog AI</p></div>
+                        <div class="mb-4"><a href="https://llmresourceshub.vercel.app/" target="_blank" class="link-style">LLM Resources Hub</a><p class="description-text mt-1 text-sm">Katalog AI</p></div>
+                        <div class="mb-4"><a href="https://github.com/mahseema/awesome-ai-tools" target="_blank" class="link-style">Awesome AI Tools</a><p class="description-text mt-1 text-sm">Katalog AI</p></div>
+                        <div class="mb-4"><a href="https://itsbetterwithai.com/" target="_blank" class="link-style">It's Better With AI</a><p class="description-text mt-1 text-sm">Katalog AI</p></div>
+                        <div class="mb-4"><a href="https://www.gptdemo.net/gpt/search?lg=en&cate=&keywords=&tags=free,&sort=popular" target="_blank" class="link-style">GPT Demo</a><p class="description-text mt-1 text-sm">Katalog AI</p></div>
+                        <div class="mb-4"><a href="https://app.artificialstudio.ai/tools" target="_blank" class="link-style">ArtificialStudio</a><p class="description-text mt-1 text-sm">Wielonarzędziowe AI przeglądarkowe. Zasoby: <a href="https://discord.gg/EdNztJJH6z" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://docs.google.com/spreadsheets/d/18GHPEBJzDbICmMStPVkNWA_hQHiWmLcqUdEJA1b4MJM/" target="_blank" class="link-style">LLM Pricing</a><p class="description-text mt-1 text-sm">Indeks cen LLM</p></div>
+                        <div class="mb-4"><a href="https://koltregaskes.notion.site/modelreleases" target="_blank" class="link-style">Model Releases</a><p class="description-text mt-1 text-sm">Nadchodzące wydania modeli</p></div>
+                    </div>
+                    <div id="card-ai-benchmarks" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-cyan-800">assessment</span>Benchmarki AI
+                        </h3>
+                        <div class="mb-4"><a href="https://artificialanalysis.ai/" target="_blank" class="link-style">⭐ Artificial Analysis</a><p class="description-text mt-1 text-sm">Benchmarki chatbotów</p></div>
+                        <div class="mb-4"><a href="https://lmarena.ai/leaderboard" target="_blank" class="link-style">⭐ LMArena</a><p class="description-text mt-1 text-sm">Rankingi / Benchmarki chatbotów. Zasoby: <a href="https://discord.gg/6GXcFg3TH8" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lm-sys/FastChat" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://livebench.ai/" target="_blank" class="link-style">⭐ LiveBench</a><p class="description-text mt-1 text-sm">Rankingi / Benchmarki chatbotów. Zasoby: <a href="https://github.com/livebench/livebench" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://scale.com/leaderboard" target="_blank" class="link-style">SEAL LLM Leaderboards</a><p class="description-text mt-1 text-sm">Rankingi chatbotów</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/allenai/WildBench" target="_blank" class="link-style">WildBench</a><p class="description-text mt-1 text-sm">Benchmarki chatbotów. Zasoby: <a href="https://github.com/allenai/WildBench" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.wolfram.com/llm-benchmarking-project/" target="_blank" class="link-style">Wolfram LLM Benchmarking Project</a><p class="description-text mt-1 text-sm">Rankingi / Benchmarki chatbotów</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/allenai/ZeroEval" target="_blank" class="link-style">ZeroEval</a><p class="description-text mt-1 text-sm">Ranking chatbotów. Zasoby: <a href="https://github.com/WildEval/ZeroEval" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://llm-stats.com/" target="_blank" class="link-style">LLM Stats</a><p class="description-text mt-1 text-sm">Ranking chatbotów</p></div>
+                        <div class="mb-4"><a href="https://openlm.ai/chatbot-arena/" target="_blank" class="link-style">OpenLM Arena</a><p class="description-text mt-1 text-sm">Ranking chatbotów</p></div>
+                        <div class="mb-4"><a href="https://openrouter.ai/rankings" target="_blank" class="link-style">OpenRouter</a><p class="description-text mt-1 text-sm">Rankingi popularności chatbotów. Zasoby: <a href="https://discord.gg/fVyRaUDgxW" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/OpenRouterTeam" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/opencompass/open_vlm_leaderboard" target="_blank" class="link-style">Open VLM Leaderboard</a><p class="description-text mt-1 text-sm">Agregator rankingów benchmarków VLM</p></div>
+                        <div class="mb-4"><a href="https://matharena.ai/" target="_blank" class="link-style">MathArena</a><p class="description-text mt-1 text-sm">Konkursy / Benchmarki matematyczne AI</p></div>
+                        <div class="mb-4"><a href="https://aielo.co/" target="_blank" class="link-style">AI Elo</a><p class="description-text mt-1 text-sm">Konkursy / Benchmarki gier AI</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="text-generators" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-lime-600">article</span>Generatory Tekstu
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="card-creative-writing-tools" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-lime-700">drive_file_rename_outline</span>Narzędzia do Kreatywnego Pisania
+                        </h3>
+                        <div class="mb-4"><a href="https://textfx.withgoogle.com/" target="_blank" class="link-style">⭐ TextFX</a> / <a href="https://github.com/google/generative-ai-docs/tree/main/demos/palm/web/textfx" target="_blank" class="link-style">GitHub</a> lub <a href="https://rytr.me/" target="_blank" class="link-style">Rytr</a><p class="description-text mt-1 text-sm">Narzędzia AI do kreatywnego pisania / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://scripai.com/" target="_blank" class="link-style">Scrip AI</a> (Bez rejestracji), <a href="https://app.inkforall.com/tools" target="_blank" class="link-style">INK</a>, <a href="https://quickpenai.com/" target="_blank" class="link-style">QuickPen AI</a><p class="description-text mt-1 text-sm">Narzędzia tekstowe AI online</p></div>
+                        <div class="mb-4"><a href="https://novelai.net/" target="_blank" class="link-style">NovelAI</a><p class="description-text mt-1 text-sm">AI do pisania opowiadań / Bez rejestracji. Zasoby: <a href="https://github.com/fmhy/FMHY/wiki/FMHY%E2%80%90Notes.md#novelai-bypass" target="_blank" class="description-link">Ominięcie limitu</a>, <a href="https://greasyfork.org/en/scripts/448926" target="_blank" class="description-link">2</a>, <a href="https://discord.com/invite/novelai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://dreamily.ai/" target="_blank" class="link-style">Dreamily</a><p class="description-text mt-1 text-sm">AI do pisania opowiadań</p></div>
+                        <div class="mb-4"><a href="https://perchancestory.com/" target="_blank" class="link-style">PerchanceStory</a><p class="description-text mt-1 text-sm">AI do pisania opowiadań</p></div>
+                        <div class="mb-4"><a href="https://quarkle.ai/" target="_blank" class="link-style">Quarkle</a><p class="description-text mt-1 text-sm">Asystent pisania AI</p></div>
+                    </div>
+                    <div id="card-text-rephrasing" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-lime-800">edit_note</span>
+                            <a href="https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/text-tools#wiki_.25B7_text_rephrasing" target="_blank" class="link-style">Parafrazowanie Tekstu</a>
+                        </h3>
+                        <p class="description-text mt-1 text-sm">Narzędzia do parafrazowania tekstu. Kliknij tytuł, aby zobaczyć zasoby na Reddit.</p>
+                    </div>
+                    <div id="card-grammar-check" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-lime-900">spellcheck</span>
+                             <a href="https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/text-tools#wiki_.25B7_grammar_check" target="_blank" class="link-style">Sprawdzanie Gramatyki</a>
+                        </h3>
+                        <p class="description-text mt-1 text-sm">Narzędzia do sprawdzania gramatyki. Kliknij tytuł, aby zobaczyć zasoby na Reddit.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="video-generation" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-red-600">movie</span>Generowanie Wideo
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="card-video-generation-tools" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-red-700">videocam</span>Narzędzia do Generowania Wideo
+                        </h3>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/Vchitect/VBench_Leaderboard" target="_blank" class="link-style">🌐 VBench</a><p class="description-text mt-1 text-sm">Ranking modeli generowania wideo</p></div>
+                        <div class="mb-4"><a href="https://aistudio.google.com/generate-video" target="_blank" class="link-style">AI Studio</a><p class="description-text mt-1 text-sm">Veo 2. Zasoby: <a href="https://www.reddit.com/r/Bard/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/gemini" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/camenduru/text-to-video-synthesis-colab" target="_blank" class="link-style">Synthesis Colab</a><p class="description-text mt-1 text-sm">Bez limitów / Colab. Zasoby: <a href="https://discord.gg/k5BwmmvJJU" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.vidu.studio/" target="_blank" class="link-style">Vidu</a><p class="description-text mt-1 text-sm">6 miesięcznie. Zasoby: <a href="https://discord.gg/3pDU8fmQ8Y" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.genmo.ai/" target="_blank" class="link-style">Genmo</a><p class="description-text mt-1 text-sm">30 miesięcznie. Zasoby: <a href="https://github.com/genmoai/mochi" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/nateraw/stable-diffusion-videos" target="_blank" class="link-style">Stable Diffusion Videos</a><p class="description-text mt-1 text-sm">Bez limitów. Zasoby: <a href="https://colab.research.google.com/github/nateraw/stable-diffusion-videos/blob/main/stable_diffusion_videos.ipynb" target="_blank" class="description-link">Colab</a></p></div>
+                        <div class="mb-4"><a href="https://pixverse.ai/" target="_blank" class="link-style">PixVerse</a><p class="description-text mt-1 text-sm">1 dziennie. Zasoby: <a href="https://discord.com/invite/MXHErdJHMg" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://wan.video/" target="_blank" class="link-style">Wan AI</a><p class="description-text mt-1 text-sm">10 dziennie</p></div>
+                        <div class="mb-4"><a href="https://lumalabs.ai/dream-machine" target="_blank" class="link-style">Dream Machine</a><p class="description-text mt-1 text-sm">5 na konto. Zasoby: <a href="https://discord.gg/lumaai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://lensgo.ai/" target="_blank" class="link-style">LensGo</a><p class="description-text mt-1 text-sm">5 dziennie. Zasoby: <a href="https://discord.com/invite/CHMhrByFJS" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://klingai.com/" target="_blank" class="link-style">Kling AI</a><p class="description-text mt-1 text-sm">8 miesięcznie. Zasoby: <a href="https://discord.com/invite/8tj8YjSzKr" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.pika.art/" target="_blank" class="link-style">Pika</a><p class="description-text mt-1 text-sm">5 miesięcznie. Zasoby: <a href="https://discord.com/invite/pika" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://dreamina.capcut.com/ai-tool/home" target="_blank" class="link-style">Dreamina</a><p class="description-text mt-1 text-sm">150 miesięcznie</p></div>
+                        <div class="mb-4"><a href="https://chat.qwen.ai/" target="_blank" class="link-style">Qwen</a><p class="description-text mt-1 text-sm">10 dziennie</p></div>
+                        <div class="mb-4"><a href="https://www.krea.ai/" target="_blank" class="link-style">Krea</a><p class="description-text mt-1 text-sm">2 dziennie. Zasoby: <a href="https://discord.gg/rJurUAR8Kz" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://hailuoai.video/" target="_blank" class="link-style">Hailuo AI</a><p class="description-text mt-1 text-sm">3 dziennie. Zasoby: <a href="https://discord.com/invite/hvvt8hAye6" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://fusionbrain.ai/en/" target="_blank" class="link-style">Fusion Brain</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://vivago.ai/" target="_blank" class="link-style">Vivago</a><p class="description-text mt-1 text-sm">1 dziennie</p></div>
+                        <div class="mb-4"><a href="https://chatglm.cn/" target="_blank" class="link-style">ChatGLM</a><p class="description-text mt-1 text-sm">Bez limitów / Wymagana rejestracja i numer telefonu / Generatory SMS działają</p></div>
+                        <div class="mb-4"><a href="https://github.com/colinurbs/FramePack-Studio" target="_blank" class="link-style">FramePack</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa / Modele lokalne / Wymagane GPU NVIDIA</p></div>
+                        <div class="mb-4"><a href="https://www.eggnog.ai/" target="_blank" class="link-style">Eggnog</a><p class="description-text mt-1 text-sm">Remikser + Edytor wideo postaci AI</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="image-generation" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-pink-600">image</span>Generowanie Obrazów
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="card-online-image-generators" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-pink-700">photo_camera</span>Generatory Obrazów Online
+                        </h3>
+                        <div class="mb-4"><a href="https://lmarena.ai" target="_blank" class="link-style">⭐ Chatbot Arena</a><p class="description-text mt-1 text-sm">Wiele generatorów / Bez rejestracji. Zasoby: <a href="https://discord.gg/6GXcFg3TH8" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/lm-sys/FastChat" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://labs.google/fx/tools/image-fx" target="_blank" class="link-style">⭐ ImageFX</a>, <a href="https://aistudio.google.com/generate-image" target="_blank" class="link-style">AI Studio</a> lub <a href="https://gemini.google.com/" target="_blank" class="link-style">Gemini</a><p class="description-text mt-1 text-sm">Imagen 4 / Bez limitów / Zależne od regionu. Zasoby: <a href="https://discord.com/invite/googlelabs" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.mage.space/" target="_blank" class="link-style">⭐ Mage</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.com/invite/GT9bPgxyFP" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/black-forest-labs/FLUX.1-schnell" target="_blank" class="link-style">⭐ FLUX.1 Schnell</a> lub <a href="https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev" target="_blank" class="link-style">FLUX.1 Dev</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.runcomfy.com/comfyui-web" target="_blank" class="link-style">⭐ ComfyUI Online</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://grok.com/" target="_blank" class="link-style">⭐ Grok</a><p class="description-text mt-1 text-sm">25 na 2 godziny. Zasoby: <a href="https://www.reddit.com/r/grok/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/kqCc86jM55" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://dezgo.com/" target="_blank" class="link-style">Dezgo</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji. Zasoby: <a href="https://discord.com/invite/RQrGpUhPhx" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://fusionbrain.ai/en/" target="_blank" class="link-style">Fusion Brain</a>, <a href="https://rudalle.ru/" target="_blank" class="link-style">2</a><p class="description-text mt-1 text-sm">Bez limitów. Zasoby: <a href="https://t.me/kandinsky21_bot" target="_blank" class="description-link">Telegram Bot</a></p></div>
+                        <div class="mb-4"><a href="https://designer.microsoft.com/image-creator" target="_blank" class="link-style">Microsoft Designer</a>, <a href="https://www.bing.com/images/create" target="_blank" class="link-style">2</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://klingai.com/" target="_blank" class="link-style">Kling AI</a><p class="description-text mt-1 text-sm">366 miesięcznie. Zasoby: <a href="https://huggingface.co/spaces/Kwai-Kolors/Kolors-Character-With-Flux" target="_blank" class="description-link">Postacie</a>, <a href="https://huggingface.co/spaces/Kwai-Kolors/Kolors-Portrait-with-Flux" target="_blank" class="description-link">Portrety</a>, <a href="https://discord.com/invite/8tj8YjSzKr" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://aigallery.app/" target="_blank" class="link-style">AI Gallery</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://wan.video/" target="_blank" class="link-style">Wan AI</a><p class="description-text mt-1 text-sm">100 dziennie / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://piclumen.com/" target="_blank" class="link-style">PicLumen</a><p class="description-text mt-1 text-sm">50 dziennie. Zasoby: <a href="https://discord.gg/bAycHJgbD8" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.recraft.ai/" target="_blank" class="link-style">Recraft</a><p class="description-text mt-1 text-sm">50 dziennie. Zasoby: <a href="https://discord.gg/recraft" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://imgsys.org/" target="_blank" class="link-style">imgsys</a><p class="description-text mt-1 text-sm">Bez limitów / Porównaj generatory / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://build.nvidia.com/models?filters=usecase%3Ausecase_image_gen" target="_blank" class="link-style">NVIDIA NIM</a><p class="description-text mt-1 text-sm">50 dziennie / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://hotpot.ai/" target="_blank" class="link-style">Hotpot</a><p class="description-text mt-1 text-sm">75 dziennie / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://app.prodia.com/playground" target="_blank" class="link-style">Prodia</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji. Zasoby: <a href="https://discord.com/invite/495hz6vrFN" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://pollinations.ai/" target="_blank" class="link-style">Pollinations</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji. Zasoby: <a href="https://discord.gg/k9F7SyTgqn" target="_blank" class="description-link">Discord</a>, <a href="https://www.github.com/pollinations/pollinations" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.picsynth.me/generation" target="_blank" class="link-style">PicSynth</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://leonardo.ai/" target="_blank" class="link-style">Leonardo</a><p class="description-text mt-1 text-sm">150 dziennie</p></div>
+                        <div class="mb-4"><a href="https://www.loras.dev/" target="_blank" class="link-style">Loras</a><p class="description-text mt-1 text-sm">Bez limitów. Zasoby: <a href="https://github.com/Nutlope/loras-dev" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://chatglm.cn/" target="_blank" class="link-style">ChatGLM</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://www.meta.ai/icebreakers/imagine/" target="_blank" class="link-style">Meta AI</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://playground.com/" target="_blank" class="link-style">Playground</a><p class="description-text mt-1 text-sm">15 na 3 godziny</p></div>
+                        <div class="mb-4"><a href="https://tensor.art/" target="_blank" class="link-style">TensorArt</a><p class="description-text mt-1 text-sm">40 dziennie. Zasoby: <a href="https://www.reddit.com/r/TensorArt_HUB/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.com/invite/qYjANGqBED" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.shakker.ai/" target="_blank" class="link-style">Shakker</a><p class="description-text mt-1 text-sm">50 dziennie. Zasoby: <a href="https://discord.gg/djyP5u3vHY" target="_blank" class="description-link">Discord</a>, <a href="https://docs.google.com/document/d/1PZ6to6Nn995J0o0BbEPhucqge9uyc1acQoNuvWkK6M8/edit#heading=h.kkzhkyyy4ze4" target="_blank" class="description-link">Przewodnik</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/stabilityai/stable-diffusion" target="_blank" class="link-style">Stable Diffusion</a><p class="description-text mt-1 text-sm">Bez limitów. Zasoby: <a href="https://github.com/Stability-AI/stablediffusion" target="_blank" class="description-link">GitHub</a>, <a href="https://discord.com/invite/stablediffusion" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.unstability.ai/" target="_blank" class="link-style">Unstable Diffusion</a><p class="description-text mt-1 text-sm">52 dziennie</p></div>
+                        <div class="mb-4"><a href="https://www.seaart.ai/" target="_blank" class="link-style">SeaArt</a><p class="description-text mt-1 text-sm">40 dziennie. Zasoby: <a href="https://discord.com/invite/gUHDU644vU" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://artgenie.pages.dev/" target="_blank" class="link-style">Art Genie</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://raphael.app/" target="_blank" class="link-style">Raphael</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji / Używa Flux.1</p></div>
+                        <div class="mb-4"><a href="https://cgdream.ai/" target="_blank" class="link-style">CGDream</a><p class="description-text mt-1 text-sm">770 SDXL / 450 Fast FLUX / 150 FLUX Dev miesięcznie</p></div>
+                        <div class="mb-4"><a href="https://hailuoai.video/" target="_blank" class="link-style">Hailuo AI</a><p class="description-text mt-1 text-sm">100 dziennie. Zasoby: <a href="https://discord.com/invite/hvvt8hAye6" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://pixnova.ai/ai-body-generator/" target="_blank" class="link-style">PixNova AI</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://chat.oaichat.cc/" target="_blank" class="link-style">ChatK</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://preview.reve.art/" target="_blank" class="link-style">Reve Image</a><p class="description-text mt-1 text-sm">20 dziennie</p></div>
+                        <div class="mb-4"><a href="https://chat.baidu.com/" target="_blank" class="link-style">Baidu Chat</a><p class="description-text mt-1 text-sm">Wymagany numer telefonu</p></div>
+                        <div class="mb-4"><a href="https://editor.imagelabs.net/" target="_blank" class="link-style">ImageLabs</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://chat.qwen.ai/" target="_blank" class="link-style">Qwen</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://muryou-aigazou.com/" target="_blank" class="link-style">AIGazou</a><p class="description-text mt-1 text-sm">Bez limitów</p></div>
+                        <div class="mb-4"><a href="https://dreamina.capcut.com/ai-tool/home" target="_blank" class="link-style">Dreamina</a><p class="description-text mt-1 text-sm">50 dziennie</p></div>
+                        <div class="mb-4"><a href="https://perchance.org/ai-text-to-image-generator" target="_blank" class="link-style">Perchance</a>, <a href="https://perchance.org/ai-photo-generator" target="_blank" class="link-style">2</a><p class="description-text mt-1 text-sm">Bez limitów / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://getimg.ai/" target="_blank" class="link-style">getimg.ai</a><p class="description-text mt-1 text-sm">100 miesięcznie. Zasoby: <a href="https://discord.com/invite/5KsUXSzVwS" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://firefly.adobe.com/" target="_blank" class="link-style">Adobe Firefly</a><p class="description-text mt-1 text-sm">25 miesięcznie. Zasoby: <a href="https://discord.com/invite/dJnsV5s8PZ" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://app.aitubo.ai/" target="_blank" class="link-style">Aitubo</a><p class="description-text mt-1 text-sm">25 dziennie. Zasoby: <a href="https://discord.gg/qTu6YsRn7F" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://poe.com/" target="_blank" class="link-style">Poe</a><p class="description-text mt-1 text-sm">2-15 dziennie / Wymagany numer telefonu. Zasoby: <a href="https://discord.com/invite/joinpoe" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://maze.guru/gallery" target="_blank" class="link-style">Maze Guru</a><p class="description-text mt-1 text-sm">12 dziennie. Zasoby: <a href="https://discord.com/invite/maze-guru-ai-art-anime-social-1007166914801434634" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://chatgpt.com/" target="_blank" class="link-style">ChatGPT</a><p class="description-text mt-1 text-sm">3 dziennie. Zasoby: <a href="https://discord.com/invite/openai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://pixai.art/" target="_blank" class="link-style">PixAI</a><p class="description-text mt-1 text-sm">5 dziennie. Zasoby: <a href="https://discord.com/invite/pixai" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://fluxpro.art/" target="_blank" class="link-style">FluxPro</a><p class="description-text mt-1 text-sm">1 dziennie. Zasoby: <a href="https://discord.gg/YMmUAvtRva" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://glif.app/" target="_blank" class="link-style">Glif</a><p class="description-text mt-1 text-sm">20 dziennie / Bez rejestracji. Zasoby: <a href="https://discord.gg/nuR9zZ2nsh" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://vivago.ai/" target="_blank" class="link-style">Vivago</a><p class="description-text mt-1 text-sm">15 dziennie / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.krea.ai/" target="_blank" class="link-style">Krea</a><p class="description-text mt-1 text-sm">10 dziennie / Bez rejestracji. Zasoby: <a href="https://discord.gg/rJurUAR8Kz" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://labs.google/fx/en/tools/whisk" target="_blank" class="link-style">Whisk</a><p class="description-text mt-1 text-sm">Używaj obrazów jako promptów</p></div>
+                        <div class="mb-4"><a href="https://artoons.vercel.app/" target="_blank" class="link-style">Artoons</a><p class="description-text mt-1 text-sm">Generator w stylu kreskówkowym. Zasoby: <a href="https://github.com/sujjeee/artoons" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/fffiloni/diffusers-image-outpaint" target="_blank" class="link-style">Diffusers Image Outpaint</a><p class="description-text mt-1 text-sm">Rozszerzacz obrazów AI</p></div>
+                        <div class="mb-4"><a href="https://lumalabs.ai/genie" target="_blank" class="link-style">Genie</a> / <a href="https://discord.com/invite/ASbS3EykXm" target="_blank" class="link-style">Discord</a>, <a href="https://github.com/openai/shap-e" target="_blank" class="link-style">Shap-e</a>, <a href="https://github.com/ashawkey/stable-dreamfusion" target="_blank" class="link-style">Stable Dreamfusion</a> lub <a href="https://github.com/threestudio-project/threestudio" target="_blank" class="link-style">threestudio</a> / <a href="https://colab.research.google.com/github/threestudio-project/threestudio/blob/main/threestudio.ipynb" target="_blank" class="link-style">Colab</a> / <a href="https://discord.gg/ejer2MAB8N" target="_blank" class="link-style">Discord</a><p class="description-text mt-1 text-sm">Generatory obrazów 3D</p></div>
+                        <div class="mb-4"><a href="https://lumalabs.ai/interactive-scenes" target="_blank" class="link-style">Interactive Scenes</a><p class="description-text mt-1 text-sm">Generuj interaktywne sceny. Zasoby: <a href="https://discord.com/invite/ASbS3EykXm" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/AP123/IllusionDiffusion" target="_blank" class="link-style">Illusion Diffusion</a><p class="description-text mt-1 text-sm">Generator iluzji artystycznych</p></div>
+                    </div>
+                    <div id="card-image-local-frontends" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-pink-800">devices</span>Lokalne Interfejsy
+                        </h3>
+                        <div class="mb-4"><a href="https://lykos.ai/" target="_blank" class="link-style">⭐ Stability Matrix</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.com/invite/TUrgfECxHz" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/LykosAI/StabilityMatrix" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://invoke-ai.github.io/InvokeAI/" target="_blank" class="link-style">⭐ Invoke</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://github.com/invoke-ai/InvokeAI" target="_blank" class="description-link">GitHub</a>, <a href="https://discord.com/invite/ZmtBAhwWhy" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.comfy.org/" target="_blank" class="link-style">⭐ ComfyUI</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://www.reddit.com/r/comfyui/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.gg/comfyorg" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/comfyanonymous/ComfyUI" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/lllyasviel/Fooocus" target="_blank" class="link-style">⭐ Fooocus</a>, <a href="https://github.com/MoonRide303/Fooocus-MRE" target="_blank" class="link-style">2</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://colab.research.google.com/github/lllyasviel/Fooocus/blob/main/fooocus_colab.ipynb" target="_blank" class="description-link">Colab</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/MochiDiffusion/MochiDiffusion" target="_blank" class="link-style">⭐ Mochi Diffusion</a><p class="description-text mt-1 text-sm">Stable Diffusion dla Mac. Zasoby: <a href="https://discord.com/invite/x2kartzxGv" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://diffusionbee.com/" target="_blank" class="link-style">⭐ DiffusionBee</a><p class="description-text mt-1 text-sm">Stable Diffusion dla Mac. Zasoby: <a href="https://github.com/divamgupta/diffusionbee-stable-diffusion-ui" target="_blank" class="description-link">GitHub</a>, <a href="https://discord.com/invite/t6rC5RaJQn" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui" target="_blank" class="link-style">⭐ Automatic1111</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://github.com/anapnoe/stable-diffusion-webui-ux" target="_blank" class="description-link">Fork</a>, <a href="https://github.com/vladmandic/sdnext" target="_blank" class="description-link">2</a>, <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Online-Services#google-colab" target="_blank" class="description-link">Colab</a>, <a href="https://github.com/AbdullahAlfaraj/Auto-Photoshop-StableDiffusion-Plugin" target="_blank" class="description-link">Photoshop</a>, <a href="https://github.com/ThereforeGames/unprompted" target="_blank" class="description-link">Szablony</a>, <a href="https://github.com/Coyote-A/ultimate-upscale-for-automatic1111" target="_blank" class="description-link">Upscaling</a>, <a href="https://github.com/pkuliyi2015/multidiffusion-upscaler-for-automatic1111" target="_blank" class="description-link">2</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/Stability-AI/StableStudio" target="_blank" class="link-style">StableStudio</a></div>
+                        <div class="mb-4"><a href="https://easydiffusion.github.io/" target="_blank" class="link-style">Easy Diffusion</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.com/invite/u9yhsFmEkB" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/easydiffusion/easydiffusion" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://makeayo.com" target="_blank" class="link-style">Makeayo</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/FbdSxdeV8m" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/Woolverine94/biniou" target="_blank" class="link-style">biniou</a></div>
+                        <div class="mb-4"><a href="https://sygil-dev.github.io/sygil-webui/" target="_blank" class="link-style">Sygil WebUI</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://colab.research.google.com/github/Sygil-Dev/sygil-webui/blob/main/Web_based_UI_for_Stable_Diffusion_colab.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://discord.com/invite/ttM8Tm6wge" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/Sygil-Dev/sygil-webui" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://ddpn08.github.io/Radiata/en/" target="_blank" class="link-style">Radiata</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://github.com/ddPn08/Radiata" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/lllyasviel/stable-diffusion-webui-forge" target="_blank" class="link-style">SD WebUI Forge</a></div>
+                        <div class="mb-4"><a href="https://github.com/patientx/ComfyUI-Zluda" target="_blank" class="link-style">ComfyUI-Zluda</a></div>
+                    </div>
+                    <div id="card-image-guides-tools" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-pink-900">auto_stories</span>Poradniki / Narzędzia
+                        </h3>
+                        <div class="mb-4"><a href="https://github.com/Baiyuetribe/paper2gui/blob/main/README_en.md" target="_blank" class="link-style">🌐 Paper2GUI</a>, <a href="https://rentry.co/sdg-link" target="_blank" class="link-style">sdg-link</a>, <a href="https://rentry.org/LocalModelsLinks" target="_blank" class="link-style">LocalModelsLinks</a>, <a href="https://sdtools.org" target="_blank" class="link-style">SDTools</a> lub <a href="https://docs.google.com/spreadsheets/d/1zYJUM-srhgIA7wrj4Pe4QqepAsHIEC00DydoTPv4PWg/edit#gid=0" target="_blank" class="link-style">AI Creation Tools</a><p class="description-text mt-1 text-sm">Zasoby obrazów AI</p></div>
+                        <div class="mb-4"><a href="https://civitai.com/" target="_blank" class="link-style">🌐 Civitai</a><p class="description-text mt-1 text-sm">Indeks modeli SD. Zasoby: <a href="https://www.reddit.com/r/civitai/" target="_blank" class="description-link">Subreddit</a>, <a href="https://discord.gg/UwX5wKwm6c" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/civitai/civitai" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://promptomania.com/" target="_blank" class="link-style">🌐 promptoMANIA</a><p class="description-text mt-1 text-sm">Indeksy promptów</p></div>
+                        <div class="mb-4"><a href="https://sweet-hall-e72.notion.site/A-Traveler-s-Guide-to-the-Latent-Space-85efba7e5e6a40e5bd3cae980f30235f" target="_blank" class="link-style">⭐ A Traveler's Guide to the Latent Space</a><p class="description-text mt-1 text-sm">Przewodnik po sztuce AI</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/pharmapsychotic/CLIP-Interrogator" target="_blank" class="link-style">⭐ CLIP Interrogator</a> / <a href="https://huggingface.co/spaces/fffiloni/CLIP-Interrogator-2" target="_blank" class="link-style">2</a><p class="description-text mt-1 text-sm">Określ prawdopodobne użyte prompty obrazu. Zasoby: <a href="https://colab.research.google.com/github/pharmapsychotic/clip-interrogator/blob/main/clip_interrogator.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://colab.research.google.com/github/pharmapsychotic/clip-interrogator/blob/open-clip/clip_interrogator.ipynb" target="_blank" class="description-link">2</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/adieyal/sd-dynamic-prompts" target="_blank" class="link-style">SD Dynamic Prompts</a><p class="description-text mt-1 text-sm">Rozszerzenie dla Automatic1111</p></div>
+                        <div class="mb-4"><a href="https://stablehorde.net/" target="_blank" class="link-style">AI Horde</a><p class="description-text mt-1 text-sm">Rozproszona sieć GPU uruchamiających Stable Diffusion. Zasoby: <a href="https://aqualxx.github.io/stable-ui/" target="_blank" class="description-link">Interfejs</a>, <a href="https://tinybots.net/artbot" target="_blank" class="description-link">2</a>, <a href="https://artificial-art.eu/" target="_blank" class="description-link">3</a>, <a href="https://discord.gg/3DxrhksKzn" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/Haidra-Org/AI-Horde" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.iopaint.com/" target="_blank" class="link-style">IOPaint</a><p class="description-text mt-1 text-sm">Wypełnianie obrazu / Usuwanie obiektów. Zasoby: <a href="https://colab.research.google.com/drive/1TKVlDZiE3MIZnAUMpv2t_S4hLr6TUY1d?usp=sharing" target="_blank" class="description-link">Colab</a>, <a href="https://github.com/Sanster/IOPaint" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://discord.com/invite/unstablediffusion" target="_blank" class="link-style">Unstable Diffusion</a><p class="description-text mt-1 text-sm">Społeczność obrazów AI</p></div>
+                        <div class="mb-4"><a href="https://microsoft.github.io/generative-ai-for-beginners/" target="_blank" class="link-style">Generative AI for Beginners</a><p class="description-text mt-1 text-sm">Przewodniki po generatywnej AI</p></div>
+                    </div>
+                     <div id="card-image-restoration" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-pink-500">photo_filter</span>
+                            <a href="https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/img-tools#wiki_.25B7_upscale_.2F_restore" target="_blank" class="link-style">Przywracanie Obrazów</a>
+                        </h3>
+                        <p class="description-text mt-1 text-sm">Narzędzia do przywracania jakości obrazów. Kliknij tytuł, aby zobaczyć zasoby na Reddit.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="audio-generation" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-yellow-600">graphic_eq</span>Generowanie Audio
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     <div id="card-music-generation-tools" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-yellow-700">music_note</span>Narzędzia do Generowania Muzyki
+                        </h3>
+                        <div class="mb-4"><a href="https://www.riffusion.com/" target="_blank" class="link-style">⭐ Riffusion</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/riffusion-1053034685590143047" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://suno.com/" target="_blank" class="link-style">⭐ Suno</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://sunoaiwiki.com/en" target="_blank" class="description-link">Przewodnik</a>, <a href="https://discord.com/invite/suno" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://labs.google/fx/tools/music-fx" target="_blank" class="link-style">MusicFX</a><p class="description-text mt-1 text-sm">Zależne od regionu</p></div>
+                        <div class="mb-4"><a href="https://tones.wolfram.com/" target="_blank" class="link-style">WolframTones</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.stableaudio.com/" target="_blank" class="link-style">Stable Audio</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.com/invite/stablediffusion" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.udio.com/" target="_blank" class="link-style">Udio</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/udio" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://fredericbriolet.com/avg/" target="_blank" class="link-style">audio visual generator</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.fakemusicgenerator.com/" target="_blank" class="link-style">Fake Music Generator</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/facebook/MusicGen" target="_blank" class="link-style">MusicGen</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://colab.research.google.com/drive/1ECmNEoXk8kvnLEMBMF2LY82E7XmIG4yu" target="_blank" class="description-link">Colab</a>, <a href="https://github.com/facebookresearch/audiocraft/blob/main/docs/MUSICGEN.md" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://sonauto.ai/" target="_blank" class="link-style">Sonauto</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/pfXar3ChH8" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.beatoven.ai/" target="_blank" class="link-style">Beatoven.ai</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/8nXq56wwJM" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://waveformer.replicate.dev/" target="_blank" class="link-style">Waveformer</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://github.com/fofr/waveformer" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://soundraw.io/" target="_blank" class="link-style">SOUNDRAW</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://mubert.com/" target="_blank" class="link-style">Mubert</a></div>
+                        <div class="mb-4"><a href="https://aiva.ai/" target="_blank" class="link-style">AIVA</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discordapp.com/invite/ypDnFXN" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://boomy.com/" target="_blank" class="link-style">Boomy</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/DNHQXeJegp" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://melobytes.com/en" target="_blank" class="link-style">Melobytes</a></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/enzostvs/ai-jukebox" target="_blank" class="link-style">AI Jukebox</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://home.eapy.io/" target="_blank" class="link-style">Eapy</a><p class="description-text mt-1 text-sm">Generator sampli MIDI</p></div>
+                        <div class="mb-4"><a href="https://output.com/products/pack-generator" target="_blank" class="link-style">Pack Generator</a><p class="description-text mt-1 text-sm">Generator paczek sampli</p></div>
+                        <div class="mb-4"><a href="https://hkchengrex.com/MMAudio/" target="_blank" class="link-style">MMAudio</a><p class="description-text mt-1 text-sm">Generuj audio do niemych filmów. Zasoby: <a href="https://huggingface.co/spaces/hkchengrex/MMAudio" target="_blank" class="description-link">Demo</a>, <a href="https://colab.research.google.com/drive/1TAaXCY2-kPk4xE4PwKB3EqFbSnkUuzZ8?usp=sharing" target="_blank" class="description-link">Colab</a>, <a href="https://github.com/hkchengrex/MMAudio" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.drumloopai.com/" target="_blank" class="link-style">Drumloop AI</a><p class="description-text mt-1 text-sm">Generator pętli perkusyjnych</p></div>
+                        <div class="mb-4"><a href="https://www.wombo.ai/" target="_blank" class="link-style">WOMBO</a><p class="description-text mt-1 text-sm">Lip Sync zasilany AI</p></div>
+                    </div>
+                    <div id="card-audio-text-to-speech" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-yellow-800">record_voice_over</span>Tekst na Mowę (TTS)
+                        </h3>
+                        <div class="mb-4"><a href="https://www.text-to-speech.online/" target="_blank" class="link-style">⭐ TTS Online</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://uberduck.ai/" target="_blank" class="link-style">Uberduck</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/uberduck-768215836665446480" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://illuminate.google.com/" target="_blank" class="link-style">Google Illuminate</a><p class="description-text mt-1 text-sm">Generuj rozmowy AI</p></div>
+                        <div class="mb-4"><a href="https://elevenlabs.io/" target="_blank" class="link-style">ElevenLabs</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://discord.gg/elevenlabs" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/elevenlabs" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://ttsmp3.com/" target="_blank" class="link-style">ttsMP3</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://fakeyou.com/" target="_blank" class="link-style">FakeYou</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://discord.gg/fakeyou" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://luvvoice.com/" target="_blank" class="link-style">Luvvoice</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://ttsmaker.com/" target="_blank" class="link-style">TTSMaker</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://github.com/neonbjb/tortoise-tts" target="_blank" class="link-style">Tortoise TTS</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/suno/bark" target="_blank" class="link-style">Bark</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://colab.research.google.com/drive/1eJfA2XUa-mXwdMy7DoYKVYHI1iTd9Vkt?usp=sharing" target="_blank" class="description-link">Colab</a>, <a href="https://github.com/suno-ai/bark" target="_blank" class="description-link">GitHub</a>, <a href="https://discord.com/invite/J2B2vsjKuE" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://ttsopenai.com/" target="_blank" class="link-style">TTSOpenAI</a> lub <a href="https://www.openai.fm/" target="_blank" class="link-style">OpenAI.fm</a><p class="description-text mt-1 text-sm">Bez rejestracji / Bot OpenAI</p></div>
+                        <div class="mb-4"><a href="https://ai-speaker.net/" target="_blank" class="link-style">AI Speaker</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://github.com/rany2/edge-tts" target="_blank" class="link-style">edge-tts</a><p class="description-text mt-1 text-sm">Bez rejestracji / Moduł Python</p></div>
+                        <div class="mb-4"><a href="https://github.com/index-tts/index-tts" target="_blank" class="link-style">IndexTTS</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.hailuo.ai/audio/" target="_blank" class="link-style">Voices</a></div>
+                        <div class="mb-4"><a href="https://texttospeech.io/" target="_blank" class="link-style">TextToSpeech.io</a></div>
+                        <div class="mb-4"><a href="https://lazypy.ro/tts/" target="_blank" class="link-style">LazyPy</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://github.com/chrisjp/tts" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/hexgrad/Kokoro-TTS" target="_blank" class="link-style">Kokoro TTS</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://discord.gg/QuGxSWBfQy" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/hexgrad/kokoro" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://ondoku3.com/en/" target="_blank" class="link-style">Ondoku</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://anyvoicelab.com/long-form-text-to-speech-converter/" target="_blank" class="link-style">AnyVoiceLab</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://github.com/jasonppy/VoiceCraft" target="_blank" class="link-style">VoiceCraft</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://colab.research.google.com/drive/1IOjpglQyMTO2C3Y94LD9FY0Ocn-RJRg6?usp=sharing" target="_blank" class="description-link">Colab</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/netease-youdao/EmotiVoice" target="_blank" class="link-style">EmotiVoice</a></div>
+                        <div class="mb-4"><a href="https://fish.audio/" target="_blank" class="link-style">Fish Audio</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://github.com/fishaudio" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/gitmylo/audio-webui" target="_blank" class="link-style">Audio-WebUI</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://colab.research.google.com/github/gitmylo/audio-webui/blob/master/audio_webui_colab.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://discord.gg/NB86C3Szkg" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://www.vanillavoice.com/" target="_blank" class="link-style">VanillaVoice</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://ttsfree.com/" target="_blank" class="link-style">TTSFree</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://lovo.ai/" target="_blank" class="link-style">LOVO</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/vWHw5ZKEmk" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://soundoftext.com/" target="_blank" class="link-style">SoundofText</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://freetts.com/" target="_blank" class="link-style">FreeTTS</a></div>
+                        <div class="mb-4"><a href="https://www.hume.ai/" target="_blank" class="link-style">Hume</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://voicemaker.in/" target="_blank" class="link-style">Voicemaker</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.naturalreaders.com/online/" target="_blank" class="link-style">NaturalReaders</a><p class="description-text mt-1 text-sm">Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://github.com/coqui-ai/tts" target="_blank" class="link-style">TTS</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://discord.gg/5eXr5seRrv" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://clash.me/" target="_blank" class="link-style">Clash</a></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/skytnt/moe-tts" target="_blank" class="link-style">Moe TTS</a><p class="description-text mt-1 text-sm">Bez rejestracji. Zasoby: <a href="https://colab.research.google.com/drive/14Pb8lpmwZL-JI5Ub6jpG4sz2-8KS0kbS?usp=sharing" target="_blank" class="description-link">Colab</a></p></div>
+                    </div>
+                    <div id="card-audio-voice-change" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-yellow-900">voice_over_record</span>Zmiana / Klonowanie Głosu
+                        </h3>
+                        <div class="mb-4"><a href="https://applio.org/" target="_blank" class="link-style">⭐ Applio</a><p class="description-text mt-1 text-sm">Klonowanie głosu / Bez rejestracji. Zasoby: <a href="https://discord.gg/urxFjYmYYh" target="_blank" class="description-link">Discord</a>, <a href="https://github.com/IAHispano/Applio" target="_blank" class="description-link">GitHub</a></p></div>
+                        <div class="mb-4"><a href="https://www.weights.com/" target="_blank" class="link-style">⭐ Weights</a> / <a href="https://www.reddit.com/r/weights/" target="_blank" class="link-style">Subreddit</a> / <a href="https://discord.gg/weights" target="_blank" class="link-style">Discord</a> lub <a href="https://voice-models.com/" target="_blank" class="link-style">Voice Models</a> / <a href="https://discord.gg/3WJ8r6Bf5A" target="_blank" class="link-style">Discord</a><p class="description-text mt-1 text-sm">Modele i przewodniki głosowe AI</p></div>
+                        <div class="mb-4"><a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/en/README.en.md" target="_blank" class="link-style">⭐ RVC V2</a><p class="description-text mt-1 text-sm">Klonowanie głosu RVC V2 (Lokalnie). Zasoby: <a href="https://colab.research.google.com/github/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/Retrieval_based_Voice_Conversion_WebUI_v2.ipynb" target="_blank" class="description-link">Colab</a>, <a href="https://discord.gg/HcsmBBGyVk" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://github.com/w-okada/voice-changer/blob/master/docs_i18n/README_en.md" target="_blank" class="link-style">⭐ Voice Changer</a><p class="description-text mt-1 text-sm">Zmieniacz głosu w czasie rzeczywistym (W-Okada). Zasoby: <a href="https://rentry.co/VoiceChangerGuide" target="_blank" class="description-link">Przewodnik</a>, <a href="https://colab.research.google.com/github/w-okada/voice-changer/blob/master/Realtime_Voice_Changer_on_Colab.ipynb" target="_blank" class="description-link">Colab</a></p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/TheStinger/Ilaria_RVC" target="_blank" class="link-style">⭐ Ilaria RVC</a><p class="description-text mt-1 text-sm">Klonowanie głosu RVC V2 (Chmura/Colab) / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.weights.com/replay" target="_blank" class="link-style">Replay</a><p class="description-text mt-1 text-sm">Aplikacja desktopowa RVC. Zasoby: <a href="https://discord.gg/A5rgNwDRd4" target="_blank" class="description-link">Discord</a></p></div>
+                        <div class="mb-4"><a href="https://anyvoicelab.com/voice-cloning/" target="_blank" class="link-style">AnyVoiceLab</a><p class="description-text mt-1 text-sm">Klonowanie głosu / Bez rejestracji</p></div>
+                        <div class="mb-4"><a href="https://www.allvoicelab.com/" target="_blank" class="link-style">AllVoiceLab</a><p class="description-text mt-1 text-sm">Klonowanie głosu</p></div>
+                        <div class="mb-4"><a href="https://playground.zyphra.com/audio" target="_blank" class="link-style">Zyphra</a><p class="description-text mt-1 text-sm">Klonowanie głosu. Zasoby: <a href="https://github.com/Zyphra/Zonos" target="_blank" class="description-link">GitHub</a></p></div>
+                    </div>
+                    <div id="card-audio-voice-removal" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-yellow-500">volume_off</span>Usuwanie / Separacja Głosu
+                        </h3>
+                        <div class="mb-4"><a href="https://mvsep.com/quality_checker/multisong_leaderboard" target="_blank" class="link-style">🌐 MultiSong Leaderboard</a><p class="description-text mt-1 text-sm">Rankingi AI do separacji muzyki i głosu</p></div>
+                        <div class="mb-4"><a href="https://huggingface.co/spaces/TheStinger/UVR5_UI" target="_blank" class="link-style">⭐ UVR5 UI</a></div>
+                        <div class="mb-4"><a href="https://mvsep.com/" target="_blank" class="link-style">⭐ MVSEP</a><p class="description-text mt-1 text-sm">Zasoby: <a href="https://github.com/fmhy/FMHY/wiki/FMHY%E2%80%90Notes.md#mvsep-note" target="_blank" class="description-link">Zmniejsz czas oczekiwania w kolejce</a></p></div>
+                        <div class="mb-4"><a href="https://www.bandlab.com/splitter" target="_blank" class="link-style">Splitter</a><p class="description-text mt-1 text-sm">Wymagana rejestracja</p></div>
+                        <div class="mb-4"><a href="https://github.com/jarredou/MVSEP-MDX23-Colab_v2" target="_blank" class="link-style">MDX23</a></div>
+                        <div class="mb-4"><a href="https://github.com/jarredou/Music-Source-Separation-Training-Colab-Inference" target="_blank" class="link-style">Music-Source-Separation</a></div>
+                        <div class="mb-4"><a href="https://vocalremover.org/" target="_blank" class="link-style">VocalRemover</a></div>
+                        <div class="mb-4"><a href="https://colab.research.google.com/github/NaJeongMo/Colaboratory-Notebook-for-Ultimate-Vocal-Remover/blob/main/Vocal%20Remover%205_arch.ipynb" target="_blank" class="link-style">Ultimate Vocal Remover</a></div>
+                        <div class="mb-4"><a href="https://www.remove-vocals.com/" target="_blank" class="link-style">Remove Vocals</a>, <a href="https://www.acapella-extractor.com/" target="_blank" class="link-style">2</a></div>
+                        <div class="mb-4"><a href="https://vocali.se/en" target="_blank" class="link-style">vocali.se</a></div>
+                        <div class="mb-4"><a href="https://www.mazmazika.com/" target="_blank" class="link-style">mazmazika</a></div>
+                        <div class="mb-4"><a href="https://unmix.audio/" target="_blank" class="link-style">Vocal Remover</a></div>
+                        <div class="mb-4"><a href="https://ezstems.com/" target="_blank" class="link-style">ezstems</a></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="machine-learning" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 pb-2 category-title flex items-center">
+                    <span class="material-icons-outlined text-4xl mr-3 text-gray-600">memory</span>Uczenie Maszynowe
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="card-ml-resources" class="card p-6">
+                        <h3 class="text-xl font-semibold mb-3 subcategory-title flex items-center">
+                            <span class="material-icons-outlined mr-2 text-gray-700">school</span>Zasoby Uczenia Maszynowego
+                        </h3>
+                        <div class="mb-4"><a href="#" target="_blank" class="link-style">Kurs ML 1</a><p class="description-text mt-1 text-sm">Wprowadzenie do uczenia maszynowego.</p></div>
+                        <div class="mb-4"><a href="#" target="_blank" class="link-style">Biblioteka ML 1</a><p class="description-text mt-1 text-sm">Popularna biblioteka do projektów ML.</p></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="navbar p-6 text-center mt-auto">
+            <p class="text-sm">&copy; 2024 Katalog Narzędzi AI. Wszelkie prawa zastrzeżone.</p>
+            <p class="text-xs mt-1">Zaprojektowano z inspiracją Material 3.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle'); 
+            const sidebarSearch = document.getElementById('sidebarSearch');
+            const sidebarNav = document.getElementById('sidebarNav');
+            const sidebarLinks = sidebarNav.querySelectorAll('a.sidebar-link');
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function () {
+                    sidebar.classList.toggle('-translate-x-full'); 
+                    
+                    const isOpen = !sidebar.classList.contains('-translate-x-full');
+                    sidebar.setAttribute('aria-expanded', String(isOpen));
+                    this.setAttribute('aria-expanded', String(isOpen));
+                    
+                    const toggleIcon = this.querySelector('.material-icons-outlined');
+                    if (toggleIcon) {
+                        toggleIcon.textContent = isOpen ? 'close' : 'menu';
+                    }
+                });
+            }
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        sidebarLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+
+                    if (window.innerWidth < 768 && !sidebar.classList.contains('-translate-x-full')) {
+                        sidebar.classList.add('-translate-x-full');
+                        sidebar.setAttribute('aria-expanded', 'false');
+                        if (sidebarToggle) {
+                            sidebarToggle.setAttribute('aria-expanded', 'false');
+                            const toggleIcon = sidebarToggle.querySelector('.material-icons-outlined');
+                            if (toggleIcon) {
+                                toggleIcon.textContent = 'menu';
+                            }
+                        }
+                    }
+                });
+            });
+
+            if (sidebarSearch) {
+                sidebarSearch.addEventListener('input', function () {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    document.querySelectorAll('.sidebar-category').forEach(categoryDiv => {
+                        const categoryTitleElement = categoryDiv.querySelector('span');
+                        const categoryTitleText = categoryTitleElement.textContent.toLowerCase();
+                        let categoryHasVisibleLinks = false;
+
+                        categoryDiv.querySelectorAll('ul li').forEach(item => {
+                            const linkText = item.textContent.toLowerCase();
+                            if (linkText.includes(searchTerm)) {
+                                item.style.display = '';
+                                categoryHasVisibleLinks = true;
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+
+                        if (categoryHasVisibleLinks || categoryTitleText.includes(searchTerm)) {
+                            categoryDiv.style.display = '';
+                            categoryTitleElement.style.display = '';
+                        } else {
+                            categoryDiv.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar ? navbar.offsetHeight : 64; 
+            
+            if (sidebar) { 
+                sidebar.style.paddingTop = `${navbarHeight}px`;
+            }
+            
+            const scrollOffset = navbarHeight + 10;
+            document.querySelectorAll('section[id], div.card[id]').forEach(el => {
+                 el.style.scrollMarginTop = `${scrollOffset}px`;
+            });
+
+            function updateMobileToggleIconOnLoadAndResize() {
+                if (window.innerWidth < 768 && sidebarToggle) {
+                    const isOpen = !sidebar.classList.contains('-translate-x-full');
+                    const toggleIcon = sidebarToggle.querySelector('.material-icons-outlined');
+                    if (toggleIcon) {
+                        toggleIcon.textContent = isOpen ? 'close' : 'menu';
+                    }
+                    sidebarToggle.setAttribute('aria-expanded', String(isOpen));
+                    if (sidebar) sidebar.setAttribute('aria-expanded', String(isOpen)); 
+                } else if (window.innerWidth >= 768 && sidebar) {
+                     sidebar.setAttribute('aria-expanded', 'true');
+                }
+            }
+            window.addEventListener('resize', updateMobileToggleIconOnLoadAndResize);
+            updateMobileToggleIconOnLoadAndResize(); 
+
+        });
+    </script>
+</body>
+</html>
